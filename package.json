@@ -1,5 +1,5 @@
 {
-  "name": "wineandcheesemap",
+  "name": "gb-organized-crime",
   "version": "1.0.0",
   "description": "NEs and NPs visualisation app",
   "main": "none",
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cytoscape/wineandcheesemap.git"
+    "url": "git+https://github.com/dmtroo/organized_crime_network_graph.git"
   },
   "author": "",
   "license": "MIT",
