@@ -102,4 +102,8 @@ edge.faded {
 	display: none;
 }
 
+.filtered {
+    display: "none"
+}
+
 `;

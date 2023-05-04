@@ -6,6 +6,7 @@ import CytoscapeComponent from './cytoscape';
 import { isDev } from '../env';
 import { NodeInfo } from './node-info';
 import { Menu } from './menu';
+import { LeftMenu } from './left-menu';
 
 class AppComponent extends Component {
   constructor(props){
@@ -54,12 +55,13 @@ class AppComponent extends Component {
       h(CytoscapeComponent, { cy, controller }),
 
       infoNode ? (
-        h('div', { class: 'app-node-info' }, [
-          h(NodeInfo, { node: infoNode })
-        ])
+          h('div', { class: 'app-node-info' }, [
+            h(NodeInfo, { node: infoNode })
+          ])
       ) : null,
 
-      h(Menu, { controller })
+      h(Menu, { controller }),
+      h(LeftMenu, { controller })
     ]);
   }
 }

@@ -20,7 +20,7 @@ class Menu extends Component {
       this.focusTextBox();
     }));
 
-    bus.on('closeMenu', this.onOpenMenu = (() => {
+    bus.on('closeMenu', this.onCloseMenu = (() => {
       this.setState({ open: false });
     }));
 
@@ -72,14 +72,15 @@ class Menu extends Component {
     controller.showInfo(node);
   }
 
-  render(){
+
+  render() {
     const { controller } = this.props;
     const { open, searchMatchNodes } = this.state;
     const closed = !open;
 
     let searchResults = [];
 
-    if( searchMatchNodes ){
+    if (searchMatchNodes) {
       searchResults = searchMatchNodes.map(node => h('div.menu-node-info', {
         onClick: () => this.selectNode(node)
       }, [

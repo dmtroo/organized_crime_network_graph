@@ -40,10 +40,10 @@
   transition-duration: 250ms;
   transition-timing-function: ease-out;
   transition-property: background-color;
+}
 
-  &.menu-open {
-    background-color: transparent;
-  }
+.menu-toggle.menu-open {
+  background-color: transparent;
 }
 
 .menu-search {
@@ -75,10 +75,10 @@
   padding: 0.5em;
   cursor: pointer;
   border-top: 1px solid #333;
+}
 
-  & .node-info-more {
-    display: none;
-  }
+.menu-search-results .node-info .node-info-more {
+  display: none;
 }
 
 ::placeholder {
