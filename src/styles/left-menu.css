@@ -115,3 +115,9 @@
 .reset-filter:hover {
   color: #0056b3;
 }
+
+.divider {
+  height: 1px;
+  background: #ccc;
+  margin: 10px 0;
+}

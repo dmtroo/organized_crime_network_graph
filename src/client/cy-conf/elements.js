@@ -1,4 +1,4 @@
-import elements from '../../files/cytoscape_graph.json';
+import elements from '../../files/gb.json';
 
 
 // process data

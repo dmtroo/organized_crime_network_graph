@@ -271,7 +271,6 @@ class Controller {
             addWords(wordList, data.name);
             addWords(wordList, data.Synonym);
             addWords(wordList, data.NodeTypeFormatted);
-            addWords(wordList, data.Milk);
             addWords(wordList, data.Type);
             addWords(wordList, data.Country);
 
@@ -313,15 +312,17 @@ class Controller {
 
         const getNodeMetric = memoize(node => getMetric(node, queryWords), node => node.id());
 
+        const currentNodes = this.cy.nodes();
+
         if (!this.cachedNodeWords) {
             this.cy.batch(() => {
-                this.nodes.forEach(cacheNodeWords);
+                currentNodes.forEach(cacheNodeWords);
             });
 
             this.cachedNodeWords = true;
         }
 
-        this.searchMatchNodes = this.nodes.filter(node => {
+        this.searchMatchNodes = currentNodes.filter(node => {
             return getNodeMetric(node) > minMetricValue;
         }).sort((nodeA, nodeB) => {
             return getNodeMetric(nodeB) - getNodeMetric(nodeA);
@@ -339,6 +340,7 @@ class Controller {
     applyFilter(percentage, nodeTypes, edgeColors) {
         const {cy} = this;
         const totalNodes = cy.nodes().length;
+        percentage = percentage === '' ? 100 : percentage;
         const topX = Math.floor((percentage / 100) * totalNodes);
 
         const sortedNodesByStrength = cy.nodes().sort((a, b) => b.data("Strength") - a.data("Strength"));
@@ -422,7 +424,6 @@ class Controller {
 
         layout.run();
     }
-
 
 }
 

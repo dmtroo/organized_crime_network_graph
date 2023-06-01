@@ -7,6 +7,11 @@ import { isDev } from '../env';
 import { NodeInfo } from './node-info';
 import { Menu } from './menu';
 import { LeftMenu } from './left-menu';
+import gb_graph from '../../files/gb.json';
+import fr_graph from '../../files/fr.json';
+import it_graph from '../../files/it.json';
+import nl_graph from '../../files/nl.json';
+import be_graph from '../../files/be.json';
 
 class AppComponent extends Component {
   constructor(props){
@@ -48,6 +53,47 @@ class AppComponent extends Component {
     bus.removeListener('hideInfo', this.onHideInfo);
   }
 
+  switchGraph(graphName) {
+    let elements;
+    switch(graphName) {
+      case 'GB':
+        elements = gb_graph;
+        break;
+      case 'FR':
+        elements = fr_graph;
+        break;
+      case 'IT':
+        elements = it_graph;
+        break;
+      case 'NL':
+        elements = nl_graph;
+        break;
+      case 'BE':
+        elements = be_graph;
+        break;
+    }
+      // process data as before
+    elements.nodes.forEach((n) => {
+        const data = n.data;
+
+        data.NodeTypeFormatted = data.NodeType;
+        data.sentencesToShow = data.sentences;
+
+        n.data.orgPos = {
+          x: n.position.x,
+          y: n.position.y
+        };
+
+        data.name = data.name.replace(/[-]/g, '-\u200B');
+      });
+
+    this.state.cy.elements().remove();
+    this.state.cy.add(elements);
+    this.state.cy.layout({ name: 'preset' }).run();
+
+    this.state.controller.initialElements = this.state.cy.elements();
+  }
+
   render(){
     const { cy, controller, infoNode } = this.state;
 
@@ -61,7 +107,7 @@ class AppComponent extends Component {
       ) : null,
 
       h(Menu, { controller }),
-      h(LeftMenu, { controller })
+      h(LeftMenu, { controller, switchGraph: this.switchGraph.bind(this) })
     ]);
   }
 }

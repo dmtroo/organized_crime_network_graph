@@ -43,11 +43,28 @@ class LeftMenu extends Component {
         bus.removeListener('closeLeftMenu', this.onCloseLeftMenu);
     }
 
+    clearFields() {
+        document.getElementById('menu-filter-input').value = '';
+        document.getElementById('menu-filter-node-type1').value = '';
+        document.getElementById('menu-filter-node-type2').value = '';
+        document.getElementById('menu-filter-node-type3').value = '';
+        document.getElementById('menu-filter-node-type4').value = '';
+        document.getElementById('menu-filter-edge-color1').value = '';
+        document.getElementById('menu-filter-edge-color2').value = '';
+    }
+
     resetFilter() {
         console.log("resetFilter called");
+        this.clearFields();
         const {controller} = this.props;
         controller.unhighlight();
         controller.restoreInitialElements();
+    }
+
+    handleGraphChange(event) {
+        const graphName = event.target.value;
+        console.log(graphName);
+        this.props.switchGraph(graphName);
     }
 
     render() {
@@ -61,6 +78,21 @@ class LeftMenu extends Component {
                 onClick: () => controller.toggleLeftMenu()
             }),
             h('div', {class: classNames({'left-menu': true, 'menu-closed': closed})}, [
+                h('div', {class: 'menu-filter'}, [
+                    h('label', {for: 'menu-graph-selector'}, 'Corpora:'),
+                    h('select', {
+                        id: 'menu-graph-selector',
+                        name: 'menu-graph-selector',
+                        onChange: this.handleGraphChange.bind(this)
+                    }, [
+                        h('option', {value: 'GB'}, 'GB'),
+                        h('option', {value: 'FR'}, 'FR'),
+                        h('option', {value: 'IT'}, 'IT'),
+                        h('option', {value: 'NL'}, 'NL'),
+                        h('option', {value: 'BE'}, 'BE'),
+                    ]),
+                ]),
+                h('div', {class: 'divider'}, ''),
                 h('div', {class: 'menu-filter'}, [
                     h('label', {for: 'menu-filter-input'}, 'Percentage:'),
                     h('input', {
