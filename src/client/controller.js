@@ -269,10 +269,10 @@ class Controller {
             const wordList = [];
 
             addWords(wordList, data.name);
-            addWords(wordList, data.Synonym);
+            //addWords(wordList, data.Synonym);
             addWords(wordList, data.NodeTypeFormatted);
             addWords(wordList, data.Type);
-            addWords(wordList, data.Country);
+            //addWords(wordList, data.Country);
 
             node.data('words', wordList);
         };
@@ -292,6 +292,7 @@ class Controller {
 
         const getMetric = (node, queryWords) => {
             const nodeWords = node.data('words');
+            if (!nodeWords) return 0;
             let score = 0;
 
             for (let i = 0; i < nodeWords.length; i++) {
@@ -336,6 +337,11 @@ class Controller {
     getSearchMatchNodes() {
         return this.searchMatchNodes;
     }
+
+    invalidateWordCache() {
+        this.cachedNodeWords = false;
+    }
+
 
     applyFilter(percentage, nodeTypes, edgeColors) {
         const {cy} = this;
@@ -401,9 +407,11 @@ class Controller {
 
     restoreInitialElements() {
         const {cy} = this;
-
         // Reset search query
         this.updateSearch('');
+
+        // Invalidate word cache
+        this.invalidateWordCache();
 
         // Remove all elements from cy
         cy.remove(cy.elements());

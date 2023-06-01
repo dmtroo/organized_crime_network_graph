@@ -72,27 +72,27 @@ class AppComponent extends Component {
         elements = be_graph;
         break;
     }
-      // process data as before
     elements.nodes.forEach((n) => {
-        const data = n.data;
+      const data = n.data;
 
-        data.NodeTypeFormatted = data.NodeType;
-        data.sentencesToShow = data.sentences;
+      data.NodeTypeFormatted = data.NodeType;
+      data.sentencesToShow = data.sentences;
 
-        n.data.orgPos = {
-          x: n.position.x,
-          y: n.position.y
-        };
+      n.data.orgPos = {
+        x: n.position.x,
+        y: n.position.y
+      };
 
-        data.name = data.name.replace(/[-]/g, '-\u200B');
-      });
+      data.name = data.name.replace(/[-]/g, '-\u200B');
+    });
 
     this.state.cy.elements().remove();
-    this.state.cy.add(elements);
+    const addedElements = this.state.cy.add(elements);
     this.state.cy.layout({ name: 'preset' }).run();
 
-    this.state.controller.initialElements = this.state.cy.elements();
+    this.state.controller.initialElements = addedElements.jsons();
   }
+
 
   render(){
     const { cy, controller, infoNode } = this.state;
