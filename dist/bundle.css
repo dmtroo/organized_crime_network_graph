@@ -665,7 +665,8 @@ a {
 .menu-filter input,
 .menu-filter select,
 .menu-filter select option {
-  background: rgba(255, 255, 255, .3);
+  background-color: rgba(255, 255, 255, .1);
+  color: #fff;
   border: 1px solid rgba(255, 255, 255, .3);
   border-radius: 4px;
   padding: 10px;
