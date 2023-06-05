@@ -63,16 +63,13 @@
 .menu-filter input,
 .menu-filter select,
 .menu-filter select option {
+  background: rgba(255, 255, 255, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   padding: 10px;
   font-size: 14px;
   outline: none;
   transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
-
-.menu-filter select option {
-  background: rgba(255, 255, 255, 0.3);
 }
 
 .menu-filter select {
