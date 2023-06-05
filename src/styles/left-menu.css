@@ -71,6 +71,10 @@
   transition: background-color 0.3s, color 0.3s, border 0.3s;
 }
 
+.menu-filter select option {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 .menu-filter select {
   margin-right: 7px;
   margin-top: 7px;
