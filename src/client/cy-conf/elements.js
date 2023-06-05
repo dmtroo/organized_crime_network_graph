@@ -6,6 +6,9 @@ elements.nodes.forEach((n) => {
   const data = n.data;
 
   data.NodeTypeFormatted = data.NodeType;
+  data.occur = data.cooccurrence;
+  data.occur_doc = data.occur_in_documents;
+  data.occur_sent = data.occur_in_sentences;
   data.sentencesToShow = data.sentences;
 
   // save original position for use in animated layouts
