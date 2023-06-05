@@ -13,6 +13,14 @@ import it_graph from '../../files/it.json';
 import nl_graph from '../../files/nl.json';
 import be_graph from '../../files/be.json';
 
+const countryNameMap = {
+  'GB': 'United Kingdom',
+  'FR': 'France',
+  'IT': 'Italy',
+  'NL': 'Netherlands',
+  'BE': 'Belgium',
+};
+
 class AppComponent extends Component {
   constructor(props){
     super(props);
@@ -35,7 +43,7 @@ class AppComponent extends Component {
       window.controller = controller;
     }
 
-    this.state = { controller, cy };
+    this.state = { controller, cy, country: countryNameMap['GB'] };
 
     bus.on('showInfo', this.onShowInfo = (node => {
       this.setState({ infoNode: node });
@@ -72,6 +80,9 @@ class AppComponent extends Component {
         elements = be_graph;
         break;
     }
+
+    this.setState({ country: countryNameMap[graphName] });
+
     elements.nodes.forEach((n) => {
       const data = n.data;
 
@@ -95,7 +106,7 @@ class AppComponent extends Component {
 
 
   render(){
-    const { cy, controller, infoNode } = this.state;
+    const { cy, controller, infoNode, country } = this.state;
 
     return h('div', { class: 'app' }, [
       h(CytoscapeComponent, { cy, controller }),
@@ -107,7 +118,9 @@ class AppComponent extends Component {
       ) : null,
 
       h(Menu, { controller }),
-      h(LeftMenu, { controller, switchGraph: this.switchGraph.bind(this) })
+      h(LeftMenu, { controller, switchGraph: this.switchGraph.bind(this) }),
+
+      h('div', { class: 'app-country' }, country)
     ]);
   }
 }

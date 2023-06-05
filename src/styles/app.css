@@ -56,3 +56,11 @@ body,
 a {
   color: rgb(140, 203, 255);
 }
+
+.app-country {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  font-size: 18px;
+  color: white;
+}
