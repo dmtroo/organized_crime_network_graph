@@ -7,11 +7,6 @@ import { isDev } from '../env';
 import { NodeInfo } from './node-info';
 import { Menu } from './menu';
 import { LeftMenu } from './left-menu';
-import gb_graph from '../../files/gb.json';
-import fr_graph from '../../files/fr.json';
-import it_graph from '../../files/it.json';
-import nl_graph from '../../files/nl.json';
-import be_graph from '../../files/be.json';
 
 const countryNameMap = {
   'GB': 'United Kingdom',
@@ -62,23 +57,24 @@ class AppComponent extends Component {
     bus.removeListener('hideInfo', this.onHideInfo);
   }
 
-  switchGraph(graphName) {
+  async switchGraph(graphName) {
     let elements;
+
     switch(graphName) {
       case 'GB':
-        elements = gb_graph;
+        elements = await fetch('/files/gb.json').then(response => response.json());
         break;
       case 'FR':
-        elements = fr_graph;
+        elements = await fetch('/files/fr.json').then(response => response.json());
         break;
       case 'IT':
-        elements = it_graph;
+        elements = await fetch('/files/it.json').then(response => response.json());
         break;
       case 'NL':
-        elements = nl_graph;
+        elements = await fetch('/files/nl.json').then(response => response.json());
         break;
       case 'BE':
-        elements = be_graph;
+        elements = await fetch('/files/be.json').then(response => response.json());
         break;
     }
 
