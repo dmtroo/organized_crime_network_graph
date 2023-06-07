@@ -26,13 +26,13 @@ class NodeInfo extends Component {
     let lemmatizationNotice;
     if (data.NodeTypeFormatted === 'NP') {
       lemmatizationNotice = h('div', { class: 'node-info-lemmatization' }, [
-        'these terms are ',
+        '(this term is ',
         h('a', {
           href: 'https://www.techtarget.com/searchenterpriseai/definition/lemmatization',
           target: '_blank',
           rel: 'noopener noreferrer',
           onClick: (e) => e.stopPropagation()
-        }, 'lemmatized')
+        }, 'lemmatized)')
       ]);
     }
 

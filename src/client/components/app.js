@@ -43,7 +43,8 @@ class AppComponent extends Component {
       window.controller = controller;
     }
 
-    this.state = { controller, cy, country: countryNameMap['GB'] };
+    this.state = { controller, cy, country: countryNameMap['GB'], node_types: ["ORG", "GPE", "PERSON", "NORP", "NP"] };
+
 
     bus.on('showInfo', this.onShowInfo = (node => {
       this.setState({ infoNode: node });
@@ -81,12 +82,13 @@ class AppComponent extends Component {
         break;
     }
 
-    this.setState({ country: countryNameMap[graphName] });
-
     elements.nodes.forEach((n) => {
       const data = n.data;
 
       data.NodeTypeFormatted = data.NodeType;
+      data.occur = data.cooccurrence;
+      data.occur_doc = data.occur_in_documents;
+      data.occur_sent = data.occur_in_sentences;
       data.sentencesToShow = data.sentences;
 
       n.data.orgPos = {
@@ -102,11 +104,19 @@ class AppComponent extends Component {
     this.state.cy.layout({ name: 'preset' }).run();
 
     this.state.controller.initialElements = addedElements.jsons();
+    const node_types = elements.node_types;
+
+    // Invalidate the word cache
+    this.state.controller.invalidateWordCache();
+
+    this.setState({
+      country: countryNameMap[graphName],
+      node_types
+    });
   }
 
-
   render(){
-    const { cy, controller, infoNode, country } = this.state;
+    const { cy, controller, infoNode, country, node_types } = this.state;
 
     return h('div', { class: 'app' }, [
       h(CytoscapeComponent, { cy, controller }),
@@ -118,7 +128,7 @@ class AppComponent extends Component {
       ) : null,
 
       h(Menu, { controller }),
-      h(LeftMenu, { controller, switchGraph: this.switchGraph.bind(this) }),
+      h(LeftMenu, { controller, switchGraph: this.switchGraph.bind(this), node_types }),
 
       h('div', { class: 'app-country' }, country)
     ]);

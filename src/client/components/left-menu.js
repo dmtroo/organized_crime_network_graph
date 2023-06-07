@@ -62,13 +62,14 @@ class LeftMenu extends Component {
     }
 
     handleGraphChange(event) {
+        this.clearFields();
         const graphName = event.target.value;
         console.log(graphName);
         this.props.switchGraph(graphName);
     }
 
     render() {
-        const {controller} = this.props;
+        const {controller, node_types} = this.props;
         const {open} = this.state;
         const closed = !open;
 
@@ -112,44 +113,36 @@ class LeftMenu extends Component {
                             name: 'menu-filter-node-type1',
                         }, [
                             h('option', {value: ''}, ''),
-                            h('option', {value: 'PERSON'}, 'PERSON'),
-                            h('option', {value: 'ORG'}, 'ORG'),
-                            h('option', {value: 'GPE'}, 'GPE'),
-                            h('option', {value: 'NORP'}, 'NORP'),
-                            h('option', {value: 'NP'}, 'NP'),
+                            node_types.map(entity =>
+                                h('option', {value: entity}, entity)
+                            ),
                         ]),
                         h('select', {
                             id: 'menu-filter-node-type2',
                             name: 'menu-filter-node-type2',
                         }, [
                             h('option', {value: ''}, ''),
-                            h('option', {value: 'PERSON'}, 'PERSON'),
-                            h('option', {value: 'ORG'}, 'ORG'),
-                            h('option', {value: 'GPE'}, 'GPE'),
-                            h('option', {value: 'NORP'}, 'NORP'),
-                            h('option', {value: 'NP'}, 'NP'),
+                            node_types.map(entity =>
+                                h('option', {value: entity}, entity)
+                            ),
                         ]),
                         h('select', {
                             id: 'menu-filter-node-type3',
                             name: 'menu-filter-node-type3',
                         }, [
                             h('option', {value: ''}, ''),
-                            h('option', {value: 'PERSON'}, 'PERSON'),
-                            h('option', {value: 'ORG'}, 'ORG'),
-                            h('option', {value: 'GPE'}, 'GPE'),
-                            h('option', {value: 'NORP'}, 'NORP'),
-                            h('option', {value: 'NP'}, 'NP'),
+                            node_types.map(entity =>
+                                h('option', {value: entity}, entity)
+                            ),
                         ]),
                         h('select', {
                             id: 'menu-filter-node-type4',
                             name: 'menu-filter-node-type4',
                         }, [
                             h('option', {value: ''}, ''),
-                            h('option', {value: 'PERSON'}, 'PERSON'),
-                            h('option', {value: 'ORG'}, 'ORG'),
-                            h('option', {value: 'GPE'}, 'GPE'),
-                            h('option', {value: 'NORP'}, 'NORP'),
-                            h('option', {value: 'NP'}, 'NP'),
+                            node_types.map(entity =>
+                                h('option', {value: entity}, entity)
+                            ),
                         ]),
                     ]),
                 ]),
