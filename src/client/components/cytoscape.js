@@ -1,12 +1,16 @@
 import { h, Component } from 'preact';
+import Loader from "./loader";
 
 class CytoscapeComponent extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      loading: false
+    };
   }
 
-  render(){
-    return h('div', { id: 'cy' });    
+  render() {
+    return h('div', { id: 'cy' }, this.state.loading ? h(Loader) : null);
   }
 
   componentDidMount(){
@@ -17,15 +21,20 @@ class CytoscapeComponent extends Component {
     cy.fit(10);
 
     cy.on('tap', this.onTap = e => {
-      if( e.target === cy ){
-        controller.unhighlight();
-        controller.hideInfo();
-        controller.closeMenu();
-      } else {
-        controller.highlight(e.target);
-        controller.showInfo(e.target);
-        controller.closeMenu();
-      }
+      this.setState({ loading: true }, () => {
+        setTimeout(() => {
+          if( e.target === cy ) {
+            controller.unhighlight();
+            controller.hideInfo();
+            controller.closeMenu();
+          } else {
+            controller.highlight(e.target);
+            controller.showInfo(e.target);
+            controller.closeMenu();
+          }
+          this.setState({ loading: false });
+        }, 0);
+      });
     });
   }
 

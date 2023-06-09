@@ -36,7 +36,7 @@ class Controller {
         this.bus.emit('toggleMenu', true);
     }
 
-    closeMenu() {
+    async closeMenu() {
         this.menu = false;
 
         this.bus.emit('closeMenu');
@@ -51,7 +51,6 @@ class Controller {
         }
     }
 
-    // Left Menu Methods
     isLeftMenuOpen() {
         return this.leftMenu;
     }
@@ -77,7 +76,6 @@ class Controller {
             this.openLeftMenu();
         }
     }
-
 
     isInfoShown() {
         return this.infoNode != null;
@@ -342,96 +340,106 @@ class Controller {
         this.cachedNodeWords = false;
     }
 
-
     applyFilter(percentage, nodeTypes, edgeColors) {
-        const {cy} = this;
-        const totalNodes = cy.nodes().length;
-        percentage = percentage === '' ? 100 : percentage;
-        const topX = Math.floor((percentage / 100) * totalNodes);
+        return new Promise(resolve => {
+            setTimeout(() => {
+                const {cy} = this;
+                const totalNodes = cy.nodes().length;
+                percentage = percentage === '' ? 100 : percentage;
+                const topX = Math.floor((percentage / 100) * totalNodes);
 
-        const sortedNodesByStrength = cy.nodes().sort((a, b) => b.data("Strength") - a.data("Strength"));
-        const topPercentageNodes = sortedNodesByStrength.slice(0, topX);
+                const sortedNodesByStrength = cy.nodes().sort((a, b) => b.data("Strength") - a.data("Strength"));
+                const topPercentageNodes = sortedNodesByStrength.slice(0, topX);
 
-        // Filter nodes by Node Type
-        const filteredNodesByType = topPercentageNodes.filter((node) => {
-            if (nodeTypes.length === 0) {
-                return true;
-            }
-            return nodeTypes.includes(node.data('NodeType'));
+                // Filter nodes by Node Type
+                const filteredNodesByType = topPercentageNodes.filter((node) => {
+                    if (nodeTypes.length === 0) {
+                        return true;
+                    }
+                    return nodeTypes.includes(node.data('NodeType'));
+                });
+
+                const filteredNodeIds = filteredNodesByType.map(node => node.id());
+
+                const connectedEdges = filteredNodesByType.connectedEdges();
+
+                // Filter edges based on the edge colors
+                const preFilteredEdges = connectedEdges.filter(edge => {
+                    if (edgeColors.length === 0) {
+                        return true;
+                    }
+                    return edgeColors.includes(edge.data('interaction'));
+                });
+
+                const filteredEdges = preFilteredEdges.filter(edge => {
+                    const sourceNodeId = edge.source().id();
+                    const targetNodeId = edge.target().id();
+
+                    return filteredNodeIds.includes(sourceNodeId) && filteredNodeIds.includes(targetNodeId);
+                });
+
+                const connectedNodeIds = new Set();
+                filteredEdges.forEach(edge => {
+                    connectedNodeIds.add(edge.source().id());
+                    connectedNodeIds.add(edge.target().id());
+                });
+
+                const connectedNodes = filteredNodesByType.filter(node => connectedNodeIds.has(node.id()));
+
+                cy.remove(cy.elements());
+
+                cy.add(connectedNodes);
+                cy.add(filteredEdges);
+
+                const layout = cy.layout({
+                    name: "preset",
+                    positions: getOrgPos,
+                    fit: true,
+                    padding: layoutPadding,
+                    animate: true,
+                    animationDuration: animationDuration,
+                    animationEasing: easing
+                });
+
+                layout.run();
+                resolve();
+            }, 0);
         });
-
-        const filteredNodeIds = filteredNodesByType.map(node => node.id());
-
-        const connectedEdges = filteredNodesByType.connectedEdges();
-
-        // Filter edges based on the edge colors
-        const preFilteredEdges = connectedEdges.filter(edge => {
-            if (edgeColors.length === 0) {
-                return true;
-            }
-            return edgeColors.includes(edge.data('interaction'));
-        });
-
-        const filteredEdges = preFilteredEdges.filter(edge => {
-            const sourceNodeId = edge.source().id();
-            const targetNodeId = edge.target().id();
-
-            return filteredNodeIds.includes(sourceNodeId) && filteredNodeIds.includes(targetNodeId);
-        });
-
-        const connectedNodeIds = new Set();
-        filteredEdges.forEach(edge => {
-            connectedNodeIds.add(edge.source().id());
-            connectedNodeIds.add(edge.target().id());
-        });
-
-        const connectedNodes = filteredNodesByType.filter(node => connectedNodeIds.has(node.id()));
-
-        cy.remove(cy.elements());
-
-        cy.add(connectedNodes);
-        cy.add(filteredEdges);
-
-        const layout = cy.layout({
-            name: "preset",
-            positions: getOrgPos,
-            fit: true,
-            padding: layoutPadding,
-            animate: true,
-            animationDuration: animationDuration,
-            animationEasing: easing
-        });
-
-        layout.run();
     }
 
     restoreInitialElements() {
-        const {cy} = this;
-        // Reset search query
-        this.updateSearch('');
+        return new Promise(resolve => {
+            setTimeout(() => {
+                const {cy} = this;
+                // Reset search query
+                this.updateSearch('');
 
-        // Invalidate word cache
-        this.invalidateWordCache();
+                // Invalidate word cache
+                this.invalidateWordCache();
 
-        // Remove all elements from cy
-        cy.remove(cy.elements());
+                // Remove all elements from cy
+                cy.remove(cy.elements());
 
-        // Add the initial elements
-        cy.add(this.initialElements);
+                // Add the initial elements
+                cy.add(this.initialElements);
 
-        // Run a new layout to update the view
-        const layout = cy.layout({
-            name: "preset",
-            positions: getOrgPos,
-            fit: true,
-            padding: layoutPadding,
-            animate: true,
-            animationDuration: animationDuration,
-            animationEasing: easing
+                // Run a new layout to update the view
+                const layout = cy.layout({
+                    name: "preset",
+                    positions: getOrgPos,
+                    fit: true,
+                    padding: layoutPadding,
+                    animate: true,
+                    animationDuration: animationDuration,
+                    animationEasing: easing
+                });
+
+                layout.run();
+                resolve();
+            }, 0);
         });
-
-        layout.run();
     }
+
 
 }
 

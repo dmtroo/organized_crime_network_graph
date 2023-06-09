@@ -1,5 +1,6 @@
 import {h, Component} from 'preact';
 import classNames from 'classnames';
+import {Loader} from "./loader";
 
 class LeftMenu extends Component {
     constructor(props) {
@@ -10,6 +11,7 @@ class LeftMenu extends Component {
 
         this.state = {
             open: false,
+            loading: false,
         };
 
         bus.on('openLeftMenu', this.onOpenLeftMenu = (() => {
@@ -22,19 +24,25 @@ class LeftMenu extends Component {
     }
 
     applyFilter() {
-        const {controller} = this.props;
-        const percentage = document.getElementById('menu-filter-input').value;
-        const nodeType1 = document.getElementById('menu-filter-node-type1').value;
-        const nodeType2 = document.getElementById('menu-filter-node-type2').value;
-        const nodeType3 = document.getElementById('menu-filter-node-type3').value;
-        const nodeType4 = document.getElementById('menu-filter-node-type4').value;
-        const edgeColor1 = document.getElementById('menu-filter-edge-color1').value;
-        const edgeColor2 = document.getElementById('menu-filter-edge-color2').value;
+        this.setState({ loading: true }, () => {
+            requestAnimationFrame(() => {
+                const {controller} = this.props;
+                const percentage = document.getElementById('menu-filter-input').value;
+                const nodeType1 = document.getElementById('menu-filter-node-type1').value;
+                const nodeType2 = document.getElementById('menu-filter-node-type2').value;
+                const nodeType3 = document.getElementById('menu-filter-node-type3').value;
+                const nodeType4 = document.getElementById('menu-filter-node-type4').value;
+                const edgeColor1 = document.getElementById('menu-filter-edge-color1').value;
+                const edgeColor2 = document.getElementById('menu-filter-edge-color2').value;
 
-        const edgeColors = [edgeColor1, edgeColor2].filter(color => color !== '');
-        const nodeTypes = [nodeType1, nodeType2, nodeType3, nodeType4].filter(color => color !== '');
+                const edgeColors = [edgeColor1, edgeColor2].filter(color => color !== '');
+                const nodeTypes = [nodeType1, nodeType2, nodeType3, nodeType4].filter(color => color !== '');
 
-        controller.applyFilter(percentage, nodeTypes, edgeColors);
+                controller.applyFilter(percentage, nodeTypes, edgeColors).then(() => {
+                    this.setState({loading: false});
+                });
+            });
+        });
     }
 
     componentWillUnmount() {
@@ -54,23 +62,34 @@ class LeftMenu extends Component {
     }
 
     resetFilter() {
-        console.log("resetFilter called");
-        this.clearFields();
-        const {controller} = this.props;
-        controller.unhighlight();
-        controller.restoreInitialElements();
+        this.setState({ loading: true }, () => {
+            requestAnimationFrame(() => {
+                this.clearFields();
+                const {controller} = this.props;
+                controller.unhighlight();
+                controller.restoreInitialElements().then(() => {
+                    this.setState({loading: false});
+                });
+            });
+        });
     }
 
     handleGraphChange(event) {
-        this.clearFields();
-        const graphName = event.target.value;
-        console.log(graphName);
-        this.props.switchGraph(graphName);
+        this.setState({ loading: true }, () => {
+            requestAnimationFrame(() => {
+                this.clearFields();
+                const graphName = event.target.value;
+                console.log(graphName);
+                this.props.switchGraph(graphName).then(() => {
+                    this.setState({loading: false});
+                });
+            });
+        });
     }
 
     render() {
         const {controller, node_types} = this.props;
-        const {open} = this.state;
+        const {open, loading} = this.state;
         const closed = !open;
 
         return h('div', {class: 'left-menu-parent'}, [
@@ -179,7 +198,8 @@ class LeftMenu extends Component {
                         onClick: () => this.applyFilter(),
                     }, 'Apply Filter')
                 ]),
-            ])
+            ]),
+            loading && h(Loader),
         ]);
     }
 }

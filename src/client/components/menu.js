@@ -2,6 +2,7 @@ import { h, Component } from 'preact';
 import classNames from 'classnames';
 import debounce from 'lodash.debounce';
 import { NodeInfo } from './node-info';
+import Loader from "./loader";
 
 class Menu extends Component {
   constructor(props){
@@ -11,7 +12,8 @@ class Menu extends Component {
     const { bus } = controller;
 
     this.state = {
-      open: controller.isMenuOpen()
+      open: controller.isMenuOpen(),
+      loading: false,
     };
 
     bus.on('openMenu', this.onOpenMenu = (() => {
@@ -64,18 +66,23 @@ class Menu extends Component {
     }
   }
 
-  selectNode(node){
-    const { controller } = this.props;
-
-    controller.closeMenu();
-    controller.highlight(node);
-    controller.showInfo(node);
+  selectNode(node) {
+    this.setState({loading: true}, () => {
+      setTimeout(() => {
+        const {controller} = this.props;
+        controller.closeMenu().then(() => {
+          this.setState({loading: false});
+        });
+        controller.highlight(node);
+        controller.showInfo(node);
+      }, 0);
+    });
   }
 
 
   render() {
     const { controller } = this.props;
-    const { open, searchMatchNodes } = this.state;
+    const { open, searchMatchNodes, loading } = this.state;
     const closed = !open;
 
     let searchResults = [];
@@ -103,7 +110,8 @@ class Menu extends Component {
           onKeyDown: () => this.debouncedUpdateSearch()
         }),
         h('div', { class: 'menu-search-results', id: 'menu-search-results' }, searchResults)
-      ])
+      ]),
+      loading && h(Loader),
     ]);
   }
 }
