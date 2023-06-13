@@ -19,18 +19,19 @@ node {
    height: data(Strength);
    font-size: data(FontSize);
    font-weight: bold;
-   min-zoomed-font-size: 4;
    label: data(name);
    text-wrap: wrap;
-   text-max-width: 50;
+   text-max-width: 99999999999px;
+   text-overflow-wrap: anywhere;
    text-valign: center;
    text-halign: center;
    text-events: yes;
-   color: #000;
+   color: #fff;
    text-outline-width: 1;
    text-outline-color: #fff;
    text-outline-opacity: 1;
    overlay-color: #fff;
+   text-transform: uppercase;
 }
 
 node[NodeType = "NP"] {
@@ -61,8 +62,8 @@ node[NodeType = "PERSON"] {
 }
 
 node[NodeType = "ORG"] {
-   background-color: white;
-   text-outline-color: white;
+   background-color: #3AAF38;
+   text-outline-color: #3AAF38;
 }
 
 node[NodeType = "GPE"] {

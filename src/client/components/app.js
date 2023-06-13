@@ -51,11 +51,46 @@ class AppComponent extends Component {
     }));
   }
 
+  componentDidMount(){
+    const bus = this.state.controller.bus;
+
+    bus.on('showInfo', this.onShowInfo = (node => {
+      this.setState({ infoNode: node });
+    }));
+
+    bus.on('hideInfo', this.onHideInfo = (() => {
+      this.setState({ infoNode: null });
+    }));
+
+    this.state.cy.ready(() => {
+      const strengths = this.state.cy.nodes().map(node => node.data('Strength'));
+
+      strengths.sort((a, b) => a - b);
+
+      // Get the threshold for top 2% nodes
+      const threshold = strengths[Math.floor(strengths.length * 0.98)];
+
+      const scaleFactor = 59;
+
+      this.state.cy.on('zoom', () => {
+        const zoom = this.state.cy.zoom();
+
+        this.state.cy.nodes(`[Strength >= ${threshold}]`).forEach(node => {
+          const fontSize = node.data('FontSize');
+
+          node.style('font-size', ((12 / zoom) * fontSize) / scaleFactor);
+        });
+      });
+      this.state.cy.trigger('zoom');
+    });
+  }
+
   componentWillUnmount(){
     const bus = this.state.controller.bus;
 
     bus.removeListener('showInfo', this.onShowInfo);
     bus.removeListener('hideInfo', this.onHideInfo);
+    this.state.cy.removeListener('zoom');
   }
 
   async switchGraph(graphName) {
