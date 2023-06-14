@@ -77,15 +77,13 @@ class AppComponent extends Component {
 
         this.state.cy.nodes(`[Strength >= ${threshold}]`).forEach(node => {
           const fontSize = node.data('FontSize');
-          const minFontSize = node.data('FontSize') * 2;
-          const calculatedFontSize = ((12 / zoom) * fontSize) / scaleFactor;
+          const minFontSize = node.data('FontSize') * 2.5;
+          let calculatedFontSize = ((12 / zoom) * fontSize) / scaleFactor;
 
-          // Ensure the font size never goes below the minimum
           if (calculatedFontSize < minFontSize) {
-            node.style('font-size', minFontSize);
-          } else {
-            node.style('font-size', calculatedFontSize);
+            calculatedFontSize = minFontSize;
           }
+          node.style('font-size', calculatedFontSize);
         });
       });
 
