@@ -21,7 +21,7 @@ class NodeInfo extends Component {
     const data = node.data();
     const { name } = data;
     const type = data.NodeTypeFormatted + (data.Type ? ` (${data.Type})` : '');
-    const occurrences =  data.occur + " occurrences " + data.occur_sent + " in sentences, " + data.occur_doc + " in documents";
+    const occurrences =  data.occur + " occurrences in " + data.occur_sent + " sentences in " + data.occur_doc + " documents";
     const sentences = data.sentencesToShow;
     let lemmatizationNotice;
     if (data.NodeTypeFormatted === 'NP') {
@@ -42,7 +42,7 @@ class NodeInfo extends Component {
       h('div', { class: 'node-info-type' }, type),
       h('div', { class: 'node-info-occurrences' }, occurrences),
       h('div', { class: 'node-info-toggle' }, [
-        h('div', { class: 'show-sentences', onClick: this.toggleSentences }, 'Show Sentences')
+        h('div', { class: 'show-sentences', onClick: this.toggleSentences }, 'Toggle sentences')
       ]),
       this.state.showSentences && h('div', { class: 'sentences-table-wrapper' }, [
         h('table', { class: 'sentences-table' }, [

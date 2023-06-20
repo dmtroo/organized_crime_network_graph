@@ -26,6 +26,8 @@ node {
    text-valign: center;
    text-halign: center;
    text-events: yes;
+   text-background-color: gray;
+   text-background-opacity: 0.4;
    color: #fff;
    text-outline-width: 1;
    text-outline-color: #fff;

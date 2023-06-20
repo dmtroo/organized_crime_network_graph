@@ -70,14 +70,14 @@ class AppComponent extends Component {
       // Get the threshold for top 2% nodes
       const threshold = strengths[Math.floor(strengths.length * 0.98)];
 
-      const scaleFactor = 59;
+      const scaleFactor = 160;
 
       this.state.cy.on('zoom', () => {
         const zoom = this.state.cy.zoom();
 
         this.state.cy.nodes(`[Strength >= ${threshold}]`).forEach(node => {
           const fontSize = node.data('FontSize');
-          const minFontSize = node.data('FontSize') * 2.5;
+          const minFontSize = node.data('FontSize');
           let calculatedFontSize = ((12 / zoom) * fontSize) / scaleFactor;
 
           if (calculatedFontSize < minFontSize) {
