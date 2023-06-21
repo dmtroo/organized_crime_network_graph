@@ -147,7 +147,6 @@ class AppComponent extends Component {
     this.state.controller.initialElements = addedElements.jsons();
     const node_types = elements.node_types;
 
-    // Invalidate the word cache
     this.state.controller.invalidateWordCache();
 
     this.setState({

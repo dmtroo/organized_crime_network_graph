@@ -20,20 +20,20 @@ class CytoscapeComponent extends Component {
     cy.mount(container);
     cy.fit(10);
 
-    cy.on('tap', this.onTap = e => {
+    cy.on('tap', this.onTap = async e => {
       this.setState({ loading: true }, () => {
-        setTimeout(() => {
-          if( e.target === cy ) {
-            controller.unhighlight();
-            controller.hideInfo();
-            controller.closeMenu();
-          } else {
-            controller.highlight(e.target);
-            controller.showInfo(e.target);
-            controller.closeMenu();
-          }
-          this.setState({ loading: false });
-        }, 0);
+        setTimeout(async () => {
+            if (e.target === cy) {
+              await controller.unhighlight();
+              await controller.hideInfo();
+              await controller.closeMenu();
+            } else {
+              await controller.highlight(e.target);
+              await controller.showInfo(e.target);
+              await controller.closeMenu();
+            }
+            this.setState({loading: false});
+          }, 0);
       });
     });
   }

@@ -9,7 +9,7 @@ const easing = 'ease';
 const minMetricValue = 0.25; // filter out nodes from search results if they have total scores lower than this
 const minSimilarityValue = 0; // only include in total metric if the individual sim val is on [0.5, 1]
 
-const delayPromise = duration => new Promise(resolve => setTimeout(resolve, duration));
+//const delayPromise = duration => new Promise(resolve => setTimeout(resolve, duration));
 
 const getOrgPos = n => Object.assign({}, n.data('orgPos'));
 
@@ -97,7 +97,7 @@ class Controller {
         return this.lastHighlighted != null;
     }
 
-    highlight(node) {
+    async highlight(node) {
         const {cy} = this;
 
         if (this.highlightInProgress) {
@@ -110,81 +110,21 @@ class Controller {
         const nhood = this.lastHighlighted = node.closedNeighborhood();
         const others = this.lastUnhighlighted = allEles.not(nhood);
 
-        const showOverview = () => {
+        const highlightNodeAndNeighborhood = () => {
             cy.batch(() => {
                 allEles.removeClass('faded highlighted hidden');
 
                 nhood.addClass('highlighted');
                 others.addClass('hidden');
-
-                others.positions(getOrgPos);
             });
 
-            const layout = nhood.layout({
-                name: 'preset',
-                positions: getOrgPos,
-                fit: true,
-                animate: true,
-                animationDuration: animationDuration,
-                animationEasing: easing,
-                padding: layoutPadding
-            });
-
-            layout.run();
-
-            return layout.promiseOn('layoutstop');
-        };
-
-        const runLayout = () => {
-            const p = getOrgPos(node);
-
-            const layout = nhood.layout({
-                name: 'concentric',
-                fit: true,
-                animate: true,
-                animationDuration: animationDuration,
-                animationEasing: easing,
-                boundingBox: {
-                    x1: p.x - 1,
-                    x2: p.x + 1,
-                    y1: p.y - 1,
-                    y2: p.y + 1
-                },
-                avoidOverlap: true,
-                concentric: function (ele) {
-                    if (ele.same(node)) {
-                        return 2;
-                    } else {
-                        return 1;
-                    }
-                },
-                levelWidth: () => {
-                    return 1;
-                },
-                padding: layoutPadding
-            });
-
-            const promise = layout.promiseOn('layoutstop');
-
-            layout.run();
-
-            return promise;
-        };
-
-        const showOthersFaded = () => {
-            cy.batch(() => {
-                others.removeClass('hidden').addClass('faded');
-            });
+            return Promise.resolve();
         };
 
         this.bus.emit('highlight', node);
 
         return (
-            Promise.resolve()
-                .then(showOverview)
-                .then(() => delayPromise(animationDuration))
-                .then(runLayout)
-                .then(showOthersFaded)
+            highlightNodeAndNeighborhood()
                 .then(() => {
                     this.highlightInProgress = false;
                     this.bus.emit('highlightend', node);
@@ -192,7 +132,7 @@ class Controller {
         );
     }
 
-    unhighlight() {
+    async unhighlight() {
         if (!this.hasHighlight()) {
             return Promise.resolve();
         }

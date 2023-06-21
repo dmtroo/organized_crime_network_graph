@@ -25,8 +25,9 @@ class LeftMenu extends Component {
 
     applyFilter() {
         this.setState({ loading: true }, () => {
-            requestAnimationFrame(() => {
+            requestAnimationFrame(async () => {
                 const {controller} = this.props;
+                await controller.unhighlight();
                 const percentage = document.getElementById('menu-filter-input').value;
                 const nodeType1 = document.getElementById('menu-filter-node-type1').value;
                 const nodeType2 = document.getElementById('menu-filter-node-type2').value;
