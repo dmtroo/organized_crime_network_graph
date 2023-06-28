@@ -109,13 +109,15 @@ class Controller {
         const allEles = cy.elements();
         const nhood = this.lastHighlighted = node.closedNeighborhood();
         const others = this.lastUnhighlighted = allEles.not(nhood);
+        const isolated = allEles.absoluteComplement(nhood);
 
         const highlightNodeAndNeighborhood = () => {
             cy.batch(() => {
                 allEles.removeClass('faded highlighted hidden');
 
                 nhood.addClass('highlighted');
-                others.addClass('hidden');
+                others.addClass('faded');
+                isolated.addClass('hidden');
             });
 
             return Promise.resolve();
