@@ -1,6 +1,6 @@
 import { isProd } from './env';
 import { h, render } from 'preact';
-import { AppComponent } from './components/app';
+import MainComponent from './components/main-component';
 
 if( !isProd ){ // set up livereload for dev
   const script = document.createElement('script');
@@ -15,4 +15,4 @@ const root = document.createElement('div');
 root.setAttribute('id', 'root');
 document.body.appendChild(root);
 
-render(h(AppComponent), root);
+render(h(MainComponent), root);
