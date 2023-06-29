@@ -29,10 +29,9 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  width: 100px;
-  height: 100px;
-  background-image: url("./images/hcss-logo.jpeg");
-  background-size: 60% 60%;
-  background-position: 50% 50%;
+  width: 6em;
+  height: 6em;
+  background-image: url("./images/hcss-logo.png");
+  background-size: contain;
   background-repeat: no-repeat;
 }
