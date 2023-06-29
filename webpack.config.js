@@ -28,6 +28,17 @@ const conf = {
         options: {
           cacheDirectory: true
         }
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]'
+            }
+          }
+        ]
       }
     ]
   }

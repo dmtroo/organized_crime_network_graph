@@ -59,9 +59,12 @@ class Statistics extends Component {
             'BE': 'Belgium',
         };
 
-        return h('div', { style: {border: '1px solid black', margin: '10px', padding: '10px'} }, [
-            h('h2', {}, countryNameMap[country]),
-            ...Object.keys(stats).map(key => h('p', { key: key }, `${key}: ${stats[key]}`))
+        return h('div', { class: 'country-container' }, [
+            h('h2', { class: 'country-title' }, countryNameMap[country]),
+            ...Object.keys(stats).map(key => h('p', {
+                key: key,
+                class: 'country-stats'
+            }, `${key}: ${stats[key]}`))
         ]);
     }
 
@@ -72,10 +75,14 @@ class Statistics extends Component {
             return h(Loader);
         }
 
-        return h('div', { style: {display: 'flex', flexWrap: 'wrap', justifyContent: 'center'} },
-            this.countries.map(country => this.renderStatistics(country, statistics[country]))
+        return h('div', { class: 'container' },
+            [
+                h('div', { class: 'logo' }),
+                ...this.countries.map(country => this.renderStatistics(country, statistics[country]))
+            ]
         );
     }
+
 }
 
 export default Statistics;

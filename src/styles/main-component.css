@@ -1,0 +1,24 @@
+.switch-btn {
+  position: absolute;
+  left: 6%;
+  top: 95.5%;
+  transform: translate(-50%, -50%);
+  margin: 0.2em 0.125em;
+  background-color: var(--widgetBgColor);
+  color: var(--widgetTextColor);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  z-index: 11;
+  transition-duration: 250ms;
+  transition-timing-function: ease-out;
+  transition-property: background-color;
+}
+
+.switch-btn:hover {
+  background-color: var(--widgetTextColor);
+  color: var(--widgetBgColor);
+}

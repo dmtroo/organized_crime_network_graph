@@ -45,6 +45,7 @@ body,
 .loader-icon {
   width: 6em;
   height: 6em;
+  background-image: url("./images/hcss-logo-2.png");
   background-size: contain;
   background-repeat: no-repeat;
 }

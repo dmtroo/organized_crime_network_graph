@@ -16,7 +16,6 @@ class MainComponent extends Component {
     }
 
     switchPage() {
-        console.log("clicked!");
         this.setState(prevState => ({
             showGraph: !prevState.showGraph,
             loading: true
@@ -32,7 +31,7 @@ class MainComponent extends Component {
             return h(Loader);
         } else {
             return h('div', {}, [
-                h('button', { onClick: this.switchPage },
+                h('button',  {class: 'switch-btn', onClick: this.switchPage},
                     this.state.showGraph ? 'Go to Statistics Page' : 'Go to Graph Page'
                 ),
                 this.state.showGraph ? h(AppComponent) : h(StatisticsPage)
