@@ -80,6 +80,8 @@ class LeftMenu extends Component {
             requestAnimationFrame(() => {
                 this.clearFields();
                 const graphName = event.target.value;
+                const {controller} = this.props;
+                controller.unhighlight();
                 console.log(graphName);
                 this.props.switchGraph(graphName).then(() => {
                     this.setState({loading: false});

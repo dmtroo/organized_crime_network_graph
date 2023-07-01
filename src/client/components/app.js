@@ -126,6 +126,7 @@ class AppComponent extends Component {
     elements.nodes.forEach((n) => {
       const data = n.data;
 
+      data.translated_name = data.translated;
       data.NodeTypeFormatted = data.NodeType;
       data.occur = data.cooccurrence;
       data.occur_doc = data.occur_in_documents;

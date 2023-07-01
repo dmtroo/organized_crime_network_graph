@@ -776,7 +776,7 @@ a {
 }
 
 .country-container {
-  border: 1px solid black;
+  border: 1px solid #7e7d7d;
   margin: 10px;
   padding: 10px;
   height: 600px;
@@ -787,11 +787,12 @@ a {
 
 .country-title {
   text-align: center;
-  color: #a8a6a6;
+  color: #c4c2c2;
 }
 
 .country-stats {
   line-height: 1;
+  color: #c4c2c2;
 }
 
 .container {
@@ -836,7 +837,7 @@ a {
   cursor: pointer;
   -webkit-transition: background-color 0.3s, color 0.3s;
   transition: background-color 0.3s, color 0.3s;
-  z-index: 11;
+  z-index: 10;
   -webkit-transition-duration: 250ms;
           transition-duration: 250ms;
   -webkit-transition-timing-function: ease-out;

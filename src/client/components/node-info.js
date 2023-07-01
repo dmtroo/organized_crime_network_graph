@@ -20,6 +20,10 @@ class NodeInfo extends Component {
     const { node } = this.props;
     const data = node.data();
     const { name } = data;
+    let translated_name;
+    if (data.translated_name !== undefined) {
+      translated_name = h('div', { class: 'node-info-type' }, 'In English: ' + data.translated_name);
+    }
     const type = data.NodeTypeFormatted + (data.Type ? ` (${data.Type})` : '');
     const occurrences =  data.occur + " occurrences in " + data.occur_sent + " sentences in " + data.occur_doc + " documents";
     const sentences = data.sentencesToShow;
@@ -38,6 +42,7 @@ class NodeInfo extends Component {
 
     return h('div', { class: 'node-info' }, [
       h('div', { class: 'node-info-name' }, name),
+      translated_name,
       lemmatizationNotice,
       h('div', { class: 'node-info-type' }, type),
       h('div', { class: 'node-info-occurrences' }, occurrences),

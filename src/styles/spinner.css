@@ -7,7 +7,6 @@
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
   z-index: 99999999999999999;
-  opacity: 1;
 }
 
 @-webkit-keyframes spin {

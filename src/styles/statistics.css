@@ -1,5 +1,5 @@
 .country-container {
-  border: 1px solid black;
+  border: 1px solid #7e7d7d;
   margin: 10px;
   padding: 10px;
   height: 600px;
@@ -10,11 +10,12 @@
 
 .country-title {
   text-align: center;
-  color: #a8a6a6;
+  color: #c4c2c2;
 }
 
 .country-stats {
   line-height: 1;
+  color: #c4c2c2;
 }
 
 .container {

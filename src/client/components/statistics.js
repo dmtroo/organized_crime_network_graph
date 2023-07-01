@@ -77,11 +77,14 @@ class Statistics extends Component {
 
         return h('div', { class: 'container' },
             [
-                h('div', { class: 'logo' }),
+                h('a', { href: "https://hcss.nl/", target: "_blank", rel: "noopener noreferrer" },
+                    h('div', { class: 'logo' })
+                ),
                 ...this.countries.map(country => this.renderStatistics(country, statistics[country]))
             ]
         );
     }
+
 
 }
 
