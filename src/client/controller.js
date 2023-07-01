@@ -209,10 +209,7 @@ class Controller {
             const wordList = [];
 
             addWords(wordList, data.name);
-            //addWords(wordList, data.Synonym);
-            addWords(wordList, data.NodeTypeFormatted);
-            addWords(wordList, data.Type);
-            //addWords(wordList, data.Country);
+            addWords(wordList, data.translated_name);
 
             node.data('words', wordList);
         };
