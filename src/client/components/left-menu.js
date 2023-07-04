@@ -29,17 +29,10 @@ class LeftMenu extends Component {
                 const {controller} = this.props;
                 await controller.unhighlight();
                 const percentage = document.getElementById('menu-filter-input').value;
-                const nodeType1 = document.getElementById('menu-filter-node-type1').value;
-                const nodeType2 = document.getElementById('menu-filter-node-type2').value;
-                const nodeType3 = document.getElementById('menu-filter-node-type3').value;
-                const nodeType4 = document.getElementById('menu-filter-node-type4').value;
-                const edgeColor1 = document.getElementById('menu-filter-edge-color1').value;
-                const edgeColor2 = document.getElementById('menu-filter-edge-color2').value;
+                const connectedNodeType = document.getElementById('menu-filter-connected-node-type').value;
+                const edgeColor = document.getElementById('menu-filter-edge-color').value;
 
-                const edgeColors = [edgeColor1, edgeColor2].filter(color => color !== '');
-                const nodeTypes = [nodeType1, nodeType2, nodeType3, nodeType4].filter(color => color !== '');
-
-                controller.applyFilter(percentage, nodeTypes, edgeColors).then(() => {
+                controller.applyFilter(percentage, connectedNodeType, edgeColor).then(() => {
                     this.setState({loading: false});
                 });
             });
@@ -53,13 +46,9 @@ class LeftMenu extends Component {
     }
 
     clearFields() {
-        document.getElementById('menu-filter-input').value = '';
-        document.getElementById('menu-filter-node-type1').value = '';
-        document.getElementById('menu-filter-node-type2').value = '';
-        document.getElementById('menu-filter-node-type3').value = '';
-        document.getElementById('menu-filter-node-type4').value = '';
-        document.getElementById('menu-filter-edge-color1').value = '';
-        document.getElementById('menu-filter-edge-color2').value = '';
+        document.getElementById('menu-filter-target-node').value = '';
+        document.getElementById('menu-filter-connected-node-type').value = '';
+        document.getElementById('menu-filter-edge-color').value = '';
     }
 
     resetFilter() {
@@ -88,6 +77,12 @@ class LeftMenu extends Component {
                 });
             });
         });
+    }
+
+    handleTargetNodeType(event) {
+        const targetNode = event.target.value;
+        const {controller} = this.props;
+        controller.setTargetNodeType(targetNode);
     }
 
     render() {
@@ -128,67 +123,40 @@ class LeftMenu extends Component {
                     }),
                 ]),
                 h('div', {class: 'menu-filter'}, [
-                    h('label', {for: 'menu-filter-node-types'}, 'Node types:'),
-                    h('div', {id: 'menu-filter-node-types'}, [
-                        h('select', {
-                            id: 'menu-filter-node-type1',
-                            name: 'menu-filter-node-type1',
-                        }, [
-                            h('option', {value: ''}, ''),
-                            node_types.map(entity =>
-                                h('option', {value: entity}, entity)
-                            ),
-                        ]),
-                        h('select', {
-                            id: 'menu-filter-node-type2',
-                            name: 'menu-filter-node-type2',
-                        }, [
-                            h('option', {value: ''}, ''),
-                            node_types.map(entity =>
-                                h('option', {value: entity}, entity)
-                            ),
-                        ]),
-                        h('select', {
-                            id: 'menu-filter-node-type3',
-                            name: 'menu-filter-node-type3',
-                        }, [
-                            h('option', {value: ''}, ''),
-                            node_types.map(entity =>
-                                h('option', {value: entity}, entity)
-                            ),
-                        ]),
-                        h('select', {
-                            id: 'menu-filter-node-type4',
-                            name: 'menu-filter-node-type4',
-                        }, [
-                            h('option', {value: ''}, ''),
-                            node_types.map(entity =>
-                                h('option', {value: entity}, entity)
-                            ),
-                        ]),
+                    h('label', {for: 'menu-filter-target-node'}, 'Target node type:'),
+                    h('select', {
+                        id: 'menu-filter-target-node',
+                        name: 'menu-filter-target-node',
+                        onChange: this.handleTargetNodeType.bind(this)
+                    }, [
+                        h('option', {value: ''}, ''),
+                        node_types.map(entity =>
+                            h('option', {value: entity}, entity)
+                        ),
                     ]),
                 ]),
                 h('div', {class: 'menu-filter'}, [
-                    h('label', {for: 'menu-filter-edge-colors'}, 'Edge colors:'),
-                    h('div', {id: 'menu-filter-edge-colors'}, [
-                        h('select', {
-                            id: 'menu-filter-edge-color1',
-                            name: 'menu-filter-edge-color1',
-                        }, [
-                            h('option', {value: ''}, ''),
-                            h('option', {value: 'green'}, 'Green'),
-                            h('option', {value: 'yellow'}, 'Yellow'),
-                            h('option', {value: 'red'}, 'Red'),
-                        ]),
-                        h('select', {
-                            id: 'menu-filter-edge-color2',
-                            name: 'menu-filter-edge-color2',
-                        }, [
-                            h('option', {value: ''}, ''),
-                            h('option', {value: 'green'}, 'Green'),
-                            h('option', {value: 'yellow'}, 'Yellow'),
-                            h('option', {value: 'red'}, 'Red'),
-                        ]),
+                    h('label', {for: 'menu-filter-connected-node-type'}, 'Connected node type:'),
+                    h('select', {
+                        id: 'menu-filter-connected-node-type',
+                        name: 'menu-filter-connected-node-type',
+                    }, [
+                        h('option', {value: ''}, ''),
+                        node_types.map(entity =>
+                            h('option', {value: entity}, entity)
+                        ),
+                    ]),
+                ]),
+                h('div', {class: 'menu-filter'}, [
+                    h('label', {for: 'menu-filter-edge-color'}, 'Edge Color:'),
+                    h('select', {
+                        id: 'menu-filter-edge-color',
+                        name: 'menu-filter-edge-color',
+                    }, [
+                        h('option', {value: ''}, ''),
+                        h('option', {value: 'green'}, 'Green'),
+                        h('option', {value: 'yellow'}, 'Yellow'),
+                        h('option', {value: 'red'}, 'Red'),
                     ]),
                 ]),
                 h('div', {class: 'menu-buttons'}, [

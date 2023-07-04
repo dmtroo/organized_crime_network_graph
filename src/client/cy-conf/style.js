@@ -11,7 +11,7 @@ edge {
    width: data(width);
    z-index: 0;
    overlay-opacity: 0;
-  events: no;
+   events: no;
 }
 
 node {
@@ -59,13 +59,21 @@ node[NodeType = "LOC"] {
 }
 
 node[NodeType = "PERSON"] {
-   background-color: #DE3128;
-   text-outline-color: #DE3128;
+   background-image: url("/src/styles/images/person-2.png");
+   background-width: 100%;
+   background-height: 100%;
+   background-clip: none;
+   background-opacity: 0;
+   color: #fff;
 }
 
 node[NodeType = "ORG"] {
-   background-color: #3AAF38;
-   text-outline-color: #3AAF38;
+   background-image: url("/src/styles/images/organization-2.png");
+   background-width: 100%;
+   background-height: 100%;
+   background-clip: none;
+   background-opacity: 0;
+   color: #fff;
 }
 
 node[NodeType = "GPE"] {

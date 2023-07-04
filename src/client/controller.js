@@ -193,7 +193,16 @@ class Controller {
         );
     }
 
+    setTargetNodeType(targetNodeType) {
+        this.targetNodeType = targetNodeType;
+    }
+
+    setTargetNode(targetNode) {
+        this.targetNode = targetNode.data().id;
+    }
+
     updateSearch(queryString) {
+        const targetNodeType = this.targetNodeType;
         const normalize = str => str.toLowerCase();
         const getWords = str => str.split(/\s+/);
         const queryWords = getWords(normalize(queryString));
@@ -250,7 +259,8 @@ class Controller {
 
         const getNodeMetric = memoize(node => getMetric(node, queryWords), node => node.id());
 
-        const currentNodes = this.cy.nodes();
+        // if targetNode is not null or empty, only consider nodes of type targetNode
+        const currentNodes = targetNodeType ? this.cy.nodes(`[NodeType = "${targetNodeType}"]`) : this.cy.nodes();
 
         if (!this.cachedNodeWords) {
             this.cy.batch(() => {
@@ -283,24 +293,31 @@ class Controller {
         return new Promise(resolve => {
             setTimeout(() => {
                 const {cy} = this;
-                const totalNodes = cy.nodes().length;
-                percentage = percentage === '' ? 100 : percentage;
-                const topX = Math.floor((percentage / 100) * totalNodes);
 
-                const sortedNodesByStrength = cy.nodes().sort((a, b) => b.data("Strength") - a.data("Strength"));
-                const topPercentageNodes = sortedNodesByStrength.slice(0, topX);
+                // Include the target node
+                const targetNode = cy.getElementById(this.targetNode);
 
-                // Filter nodes by Node Type
-                const filteredNodesByType = topPercentageNodes.filter((node) => {
+                // Get nodes connected to the targetNode
+                const connectedNodes = targetNode.connectedEdges().connectedNodes();
+
+                // Filter connected nodes by NodeType
+                const preFilteredNodesByType = connectedNodes.filter((node) => {
                     if (nodeTypes.length === 0) {
                         return true;
                     }
                     return nodeTypes.includes(node.data('NodeType'));
                 });
 
-                const filteredNodeIds = filteredNodesByType.map(node => node.id());
+                const totalNodes = preFilteredNodesByType.length;
+                percentage = percentage === '' ? 100 : percentage;
+                const topX = Math.floor((percentage / 100) * totalNodes);
 
-                const connectedEdges = filteredNodesByType.connectedEdges();
+                // Get top percentage nodes by strength
+                const sortedNodesByStrength = preFilteredNodesByType.sort((a, b) => b.data("Strength") - a.data("Strength"));
+                const topPercentageNodes = sortedNodesByStrength.slice(0, topX);
+
+                const nodesToConsider = topPercentageNodes.union(targetNode);
+                const connectedEdges = nodesToConsider.connectedEdges();
 
                 // Filter edges based on the edge colors
                 const preFilteredEdges = connectedEdges.filter(edge => {
@@ -314,7 +331,7 @@ class Controller {
                     const sourceNodeId = edge.source().id();
                     const targetNodeId = edge.target().id();
 
-                    return filteredNodeIds.includes(sourceNodeId) && filteredNodeIds.includes(targetNodeId);
+                    return nodesToConsider.map(node => node.id()).includes(sourceNodeId) && nodesToConsider.map(node => node.id()).includes(targetNodeId);
                 });
 
                 const connectedNodeIds = new Set();
@@ -323,11 +340,11 @@ class Controller {
                     connectedNodeIds.add(edge.target().id());
                 });
 
-                const connectedNodes = filteredNodesByType.filter(node => connectedNodeIds.has(node.id()));
+                const finalConnectedNodes = nodesToConsider.filter(node => connectedNodeIds.has(node.id()));
 
                 cy.remove(cy.elements());
 
-                cy.add(connectedNodes);
+                cy.add(finalConnectedNodes);
                 cy.add(filteredEdges);
 
                 const layout = cy.layout({
@@ -342,6 +359,8 @@ class Controller {
 
                 layout.run();
                 resolve();
+
+                this.highlight(targetNode);
             }, 0);
         });
     }

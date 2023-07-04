@@ -75,6 +75,7 @@ class Menu extends Component {
         });
         controller.highlight(node);
         controller.showInfo(node);
+        controller.setTargetNode(node);
       }, 0);
     });
   }
