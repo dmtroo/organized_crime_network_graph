@@ -296,9 +296,14 @@ class Controller {
 
                 // Include the target node
                 const targetNode = cy.getElementById(this.targetNode);
+                let connectedNodes;
 
-                // Get nodes connected to the targetNode
-                const connectedNodes = targetNode.connectedEdges().connectedNodes();
+                if (targetNode && !targetNode.empty()) {
+                    // Get nodes connected to the targetNode
+                    connectedNodes = targetNode.connectedEdges().connectedNodes();
+                } else {
+                    connectedNodes = cy.nodes(); // or get all nodes if there's no target node
+                }
 
                 // Filter connected nodes by NodeType
                 const preFilteredNodesByType = connectedNodes.filter((node) => {

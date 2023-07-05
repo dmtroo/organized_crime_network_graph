@@ -57,6 +57,7 @@ class LeftMenu extends Component {
                 this.clearFields();
                 const {controller} = this.props;
                 controller.unhighlight();
+                controller.hideInfo();
                 controller.restoreInitialElements().then(() => {
                     this.setState({loading: false});
                 });
@@ -148,15 +149,15 @@ class LeftMenu extends Component {
                     ]),
                 ]),
                 h('div', {class: 'menu-filter'}, [
-                    h('label', {for: 'menu-filter-edge-color'}, 'Edge Color:'),
+                    h('label', {for: 'menu-filter-edge-color'}, 'Edge Type:'),
                     h('select', {
                         id: 'menu-filter-edge-color',
                         name: 'menu-filter-edge-color',
                     }, [
                         h('option', {value: ''}, ''),
-                        h('option', {value: 'green'}, 'Green'),
-                        h('option', {value: 'yellow'}, 'Yellow'),
-                        h('option', {value: 'red'}, 'Red'),
+                        h('option', {value: 'green'}, 'New'),
+                        h('option', {value: 'yellow'}, 'Middle'),
+                        h('option', {value: 'red'}, 'Old'),
                     ]),
                 ]),
                 h('div', {class: 'menu-buttons'}, [
