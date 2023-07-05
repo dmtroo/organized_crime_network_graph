@@ -296,32 +296,36 @@ class Controller {
 
                 // Include the target node
                 const targetNode = cy.getElementById(this.targetNode);
-                let connectedNodes;
 
-                if (targetNode && !targetNode.empty()) {
-                    // Get nodes connected to the targetNode
-                    connectedNodes = targetNode.connectedEdges().connectedNodes();
-                } else {
-                    connectedNodes = cy.nodes(); // or get all nodes if there's no target node
-                }
+                // Get all nodes regardless of the targetNode
+                const allNodes = cy.nodes();
 
-                // Filter connected nodes by NodeType
-                const preFilteredNodesByType = connectedNodes.filter((node) => {
+                // Calculate the percentage of all nodes
+                percentage = percentage === '' ? 100 : percentage;
+                const topX = Math.floor((percentage / 100) * allNodes.length);
+
+                // Get top percentage nodes by strength
+                const sortedNodesByStrength = allNodes.sort((a, b) => b.data("Strength") - a.data("Strength"));
+                const topPercentageNodes = sortedNodesByStrength.slice(0, topX);
+
+                // Filter these topPercentageNodes by NodeType
+                const filteredNodesByType = topPercentageNodes.filter((node) => {
                     if (nodeTypes.length === 0) {
                         return true;
                     }
                     return nodeTypes.includes(node.data('NodeType'));
                 });
 
-                const totalNodes = preFilteredNodesByType.length;
-                percentage = percentage === '' ? 100 : percentage;
-                const topX = Math.floor((percentage / 100) * totalNodes);
+                let nodesToConsider;
 
-                // Get top percentage nodes by strength
-                const sortedNodesByStrength = preFilteredNodesByType.sort((a, b) => b.data("Strength") - a.data("Strength"));
-                const topPercentageNodes = sortedNodesByStrength.slice(0, topX);
+                if (targetNode && !targetNode.empty()) {
+                    // Only consider nodes connected to the targetNode
+                    const connectedNodes = targetNode.connectedEdges().connectedNodes();
+                    nodesToConsider = filteredNodesByType.intersection(connectedNodes).union(targetNode);
+                } else {
+                    nodesToConsider = filteredNodesByType;
+                }
 
-                const nodesToConsider = topPercentageNodes.union(targetNode);
                 const connectedEdges = nodesToConsider.connectedEdges();
 
                 // Filter edges based on the edge colors
@@ -364,8 +368,9 @@ class Controller {
 
                 layout.run();
                 resolve();
-
-                this.highlight(targetNode);
+                if (targetNode && !targetNode.empty()) {
+                    this.highlight(targetNode);
+                }
             }, 0);
         });
     }

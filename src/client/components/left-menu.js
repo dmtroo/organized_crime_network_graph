@@ -46,6 +46,7 @@ class LeftMenu extends Component {
     }
 
     clearFields() {
+        document.getElementById('menu-filter-input').value = '';
         document.getElementById('menu-filter-target-node').value = '';
         document.getElementById('menu-filter-connected-node-type').value = '';
         document.getElementById('menu-filter-edge-color').value = '';
