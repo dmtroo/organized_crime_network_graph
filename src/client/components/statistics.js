@@ -47,10 +47,15 @@ class Statistics extends Component {
             return acc;
         }, {});
 
-        this.setState({ statistics: stats });
+        const allKeys = new Set();
+        Object.values(stats).forEach(countryStats => {
+            Object.keys(countryStats).forEach(key => allKeys.add(key));
+        });
+
+        this.setState({ statistics: stats, allKeys: Array.from(allKeys) });
     }
 
-    renderStatistics(country, stats) {
+    renderStatistics() {
         const countryNameMap = {
             'GB': 'United Kingdom',
             'FR': 'France',
@@ -59,13 +64,34 @@ class Statistics extends Component {
             'BE': 'Belgium',
         };
 
-        return h('div', { class: 'country-container' }, [
-            h('h2', { class: 'country-title' }, countryNameMap[country]),
-            ...Object.keys(stats).map(key => h('p', {
-                key: key,
-                class: 'country-stats'
-            }, `${key}: ${stats[key]}`))
-        ]);
+        const { statistics } = this.state;
+
+        const orderedKeys = ['N of documents', 'N of sentences', 'N of NPs', 'N of NEs'].concat(
+            this.state.allKeys.filter(
+                key => !['N of documents', 'N of sentences', 'N of NPs', 'N of NEs'].includes(key)
+            )
+        );
+
+        return h('table', { class: 'stats-table' },
+            [
+                h('thead', {},
+                    h('tr', {},
+                        ['Statistic', ...this.countries].map((country, i) =>
+                            h('th', { class: i === 0 ? 'first-col' : '' }, i === 0 ? country : countryNameMap[country])
+                        )
+                    )
+                ),
+                h('tbody', {},
+                    orderedKeys.map((stat) =>
+                        h('tr', {},
+                            [h('td', { class: 'first-col' }, stat), ...this.countries.map((country) =>
+                                h('td', { class: statistics[country][stat] ? '' : 'na' }, statistics[country][stat] || 'N/A')
+                            )]
+                        )
+                    )
+                )
+            ]
+        );
     }
 
     render() {
@@ -80,12 +106,12 @@ class Statistics extends Component {
                 h('a', { href: "https://hcss.nl/", target: "_blank", rel: "noopener noreferrer" },
                     h('div', { class: 'logo' })
                 ),
-                ...this.countries.map(country => this.renderStatistics(country, statistics[country]))
+                h('div', { class: 'table-container' },
+                    this.renderStatistics()
+                )
             ]
         );
     }
-
-
 }
 
 export default Statistics;
