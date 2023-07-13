@@ -14,7 +14,7 @@ class VisualizedStats extends Component {
             statistics: null
         };
         this.countries = ['GB', 'FR', 'IT', 'NL', 'BE'];
-        this.chartTypes = ['bar', 'line', 'sum'];
+        this.chartTypes = ['sum', 'bar', 'line'];
         this.dataViews = ['Raw', 'Accumulated'];
     }
 
