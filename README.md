@@ -1,4 +1,6 @@
-# Great Britain NEs NPs map
+# Organized Crime Map
+
+Countries presented: United Kingdom, Italy, France, Netherlands, Belgium
 
 This is an app to view NEs and NPs in GB Organized Crime Corpus pairings through a Cytoscape.js visualisation.
 
