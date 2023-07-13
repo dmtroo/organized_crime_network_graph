@@ -1,6 +1,6 @@
 import { h, Component } from 'preact';
-import pako from 'pako';
 import Loader from "./loader";
+import { loadStatistics } from './loadStatistics.js';
 
 class Statistics extends Component {
     constructor(props) {
@@ -14,45 +14,8 @@ class Statistics extends Component {
     }
 
     async componentDidMount() {
-        this.loadStatistics();
-    }
-
-    async fetchStatistics(countryCode) {
-        let path;
-
-        if(countryCode === 'IT') {
-            path = `src/files/${countryCode.toLowerCase()}.json.gz`;
-        } else {
-            path = `src/files/${countryCode.toLowerCase()}.json`;
-        }
-
-        const response = await fetch(path);
-
-        if(path.endsWith('.gz')) {
-            const buffer = await response.arrayBuffer();
-            const jsonString = pako.inflate(buffer, { to: 'string' });
-            return JSON.parse(jsonString).statistics;
-        } else {
-            const data = await response.json();
-            return data.statistics;
-        }
-    }
-
-    async loadStatistics() {
-        const statsPromises = this.countries.map(country => this.fetchStatistics(country));
-        const statsArray = await Promise.all(statsPromises);
-
-        const stats = statsArray.reduce((acc, currentStats, index) => {
-            acc[this.countries[index]] = currentStats;
-            return acc;
-        }, {});
-
-        const allKeys = new Set();
-        Object.values(stats).forEach(countryStats => {
-            Object.keys(countryStats).forEach(key => allKeys.add(key));
-        });
-
-        this.setState({ statistics: stats, allKeys: Array.from(allKeys) });
+        const { statistics, allKeys } = await loadStatistics();
+        this.setState({ statistics, allKeys });
     }
 
     renderStatistics() {

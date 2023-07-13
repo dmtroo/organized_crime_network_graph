@@ -39,7 +39,7 @@ class AppComponent extends Component {
       window.controller = controller;
     }
 
-    this.state = { controller, cy, country: countryNameMap['GB'], node_types: ["ORG", "GPE", "PERSON", "NORP", "NP"] };
+    this.state = { controller, cy, country: countryNameMap['GB'], node_types: ["ORG", "GPE", "PERSON", "NORP", "NP"]};
 
 
     bus.on('showInfo', this.onShowInfo = (node => {

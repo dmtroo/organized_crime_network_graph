@@ -34,6 +34,7 @@
     "@babel/core": "^7.7.4",
     "@babel/plugin-transform-react-jsx": "^7.22.3",
     "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.22.5",
     "babel-loader": "^8.0.6",
     "cross-env": "^6.0.3",
     "cssnano": "^4.1.10",
@@ -62,8 +63,12 @@
     "lodash.memoize": "^4.1.2",
     "normalize.css": "^8.0.1",
     "pako": "^2.1.0",
+    "plotly.js-dist": "^2.24.3",
     "preact": "^10.0.5",
+    "preact-chartjs-2": "^1.0.3",
     "preact-router": "^4.1.1",
-    "react-loader-spinner": "^5.3.4"
+    "react": "^16.14.0",
+    "react-loader-spinner": "^5.3.4",
+    "react-vis": "^1.12.1"
   }
 }
