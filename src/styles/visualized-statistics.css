@@ -1,0 +1,49 @@
+.input-group {
+  margin: 40px 0 20px 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.input-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-item label {
+  color: white;
+  margin-right: 8px;
+}
+
+.input-item select,
+.input-item select option {
+  max-width: 200px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+.input-item select:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--widgetTextColor);
+}
+
+.input-item .info {
+  cursor: pointer;
+  margin-left: 15px;
+  transition: color 0.3s;
+}
+
+.input-item .info:hover {
+  color: var(--widgetTextColor);
+}
+
+#chart {
+  margin-bottom: 50px;
+}

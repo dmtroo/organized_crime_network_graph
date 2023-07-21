@@ -880,3 +880,65 @@ a {
   background-color: #fff;
   color: #1a1a1a;
 }
+
+.input-group {
+  margin: 40px 0 20px 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.input-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-item label {
+  color: white;
+  margin-right: 8px;
+}
+
+.input-item select,
+.input-item select option {
+  max-width: 200px;
+  background-color: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  outline: none;
+  -webkit-transition: background-color 0.3s, color 0.3s, border 0.3s;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+.input-item select:focus {
+  background-color: rgba(255, 255, 255, .2);
+  border: 1px solid #fff;
+}
+
+.input-item .info {
+  cursor: pointer;
+  margin-left: 15px;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+
+.input-item .info:hover {
+  color: #fff;
+}
+
+#chart {
+  margin-bottom: 50px;
+}

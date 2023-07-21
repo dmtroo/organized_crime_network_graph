@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import AppComponent from './app';
 import StatisticsPage from './statistics';
-import VisualizedStats from './visualizedStats';
+import VisualizedStats from './visualized-stats';
 import Loader from './loader';
 
 class MainComponent extends Component {
