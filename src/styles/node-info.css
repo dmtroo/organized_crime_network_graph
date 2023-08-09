@@ -53,3 +53,8 @@
 .sentences-table-wrapper th {
   color: black;
 }
+
+.highlighted-node {
+  background-color: #8f7700;
+  font-weight: bold;
+}

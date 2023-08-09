@@ -29,11 +29,13 @@ class Statistics extends Component {
 
         const { statistics } = this.state;
 
-        const orderedKeys = ['N of documents', 'N of sentences', 'N of NPs', 'N of NEs'].concat(
+        const orderedKeys = ['Documents', 'Sentences', 'Noun Phrases', 'Named Entities'].concat(
             this.state.allKeys.filter(
-                key => !['N of documents', 'N of sentences', 'N of NPs', 'N of NEs'].includes(key)
+                key => !['Documents', 'Sentences', 'Noun Phrases', 'Named Entities'].includes(key)
             )
         );
+
+        const startIndex = orderedKeys.indexOf('Named Entities');
 
         return h('table', { class: 'stats-table' },
             [
@@ -45,11 +47,29 @@ class Statistics extends Component {
                     )
                 ),
                 h('tbody', {},
-                    orderedKeys.map((stat) =>
+                    orderedKeys.map((stat, index) =>
                         h('tr', {},
-                            [h('td', { class: 'first-col' }, stat), ...this.countries.map((country) =>
-                                h('td', { class: statistics[country][stat] ? '' : 'na' }, statistics[country][stat] || 'N/A')
-                            )]
+                            [
+                                h('td', {
+                                        class: 'first-col' +
+                                            (index > startIndex ? ' indent' : '')
+                                    },
+                                    [
+                                        stat,
+                                        stat === 'Named Entities' || stat === 'Noun Phrases' ?
+                                            h('i', {
+                                                class: 'fas fa-info-circle',
+                                                style: {paddingRight: '1px', marginLeft: '6px', marginBottom: '2px', color: '#888', cursor: 'pointer'},
+                                                title: stat === 'Named Entities' ?
+                                                    'A named entity is a “real-world object” that’s assigned a name – for example, a person, a country, a product or a book title.' :
+                                                    'Groups of words containing a noun and functioning like a noun.'
+                                            }) :
+                                            null,
+                                    ]),
+                                ...this.countries.map((country) =>
+                                    h('td', { class: statistics[country][stat] ? '' : 'na' }, statistics[country][stat] || 'N/A')
+                                )
+                            ]
                         )
                     )
                 )

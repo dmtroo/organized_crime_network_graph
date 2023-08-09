@@ -20,7 +20,8 @@
 .input-item select,
 .input-item select option {
   max-width: 200px;
-  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  background-color: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   padding: 10px;

@@ -16,6 +16,11 @@ class NodeInfo extends Component {
     }));
   }
 
+  highlightNodeName(sentence, nodeName) {
+    const highlightedSentence = sentence.replace(new RegExp(`(${nodeName})`, 'gi'), '<span class="highlighted-node">$1</span>');
+    return h('span', { dangerouslySetInnerHTML: { __html: highlightedSentence } });
+  }
+
   render(){
     const { node } = this.props;
     const data = node.data();
@@ -47,7 +52,8 @@ class NodeInfo extends Component {
       h('div', { class: 'node-info-type' }, type),
       h('div', { class: 'node-info-occurrences' }, occurrences),
       h('div', { class: 'node-info-toggle' }, [
-        h('div', { class: 'show-sentences', onClick: this.toggleSentences }, 'Toggle sentences')
+        h('div', { class: 'show-sentences', onClick: this.toggleSentences },
+            this.state.showSentences ? 'Hide sentences' : 'Show sentences')
       ]),
       this.state.showSentences && h('div', { class: 'sentences-table-wrapper' }, [
         h('table', { class: 'sentences-table' }, [
@@ -58,7 +64,7 @@ class NodeInfo extends Component {
           ]),
           h('tbody', {}, sentences.map(sentence =>
               h('tr', {}, [
-                h('td', {}, sentence)
+                h('td', {}, this.highlightNodeName(sentence, name))
               ])
           ))
         ])

@@ -63,3 +63,8 @@
   color: #999;
   font-style: italic;
 }
+
+.stats-table td.first-col.indent {
+  padding-left: 18px;
+  font-size: 84%;
+}

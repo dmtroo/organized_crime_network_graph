@@ -486,6 +486,11 @@ a {
   color: black;
 }
 
+.highlighted-node {
+  background-color: #8f7700;
+  font-weight: bold;
+}
+
 .menu {
   position: absolute;
   right: 0;
@@ -842,6 +847,11 @@ a {
   font-style: italic;
 }
 
+.stats-table td.first-col.indent {
+  padding-left: 18px;
+  font-size: 84%;
+}
+
 .switch-btn-container {
   position: absolute;
   bottom: 0;
@@ -913,7 +923,8 @@ a {
 .input-item select,
 .input-item select option {
   max-width: 200px;
-  background-color: rgba(255, 255, 255, .1);
+  color: white;
+  background-color: rgba(255, 255, 255, .04);
   border: 1px solid rgba(255, 255, 255, .3);
   border-radius: 4px;
   padding: 10px;

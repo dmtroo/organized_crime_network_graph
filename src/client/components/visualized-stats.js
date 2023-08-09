@@ -7,7 +7,7 @@ class VisualizedStats extends Component {
         this.state = {
             data: {},
             selectedCountry: 'All',
-            selectedStatistic: 'N of documents',
+            selectedStatistic: 'Documents',
             selectedChartType: 'sum',
             selectedDataView: 'Raw',
             allKeys: [],
@@ -120,9 +120,9 @@ class VisualizedStats extends Component {
 
     render() {
         const {allKeys, selectedCountry, selectedStatistic} = this.state;
-        let statistics = ['N of documents', 'N of sentences', 'N of NPs', 'N of NEs'].concat(
+        let statistics = ['Documents', 'Sentences', 'Noun Phrases', 'Named Entities'].concat(
             allKeys.filter(
-                key => !['N of documents', 'N of sentences', 'N of NPs', 'N of NEs'].includes(key)
+                key => !['Documents', 'Sentences', 'Noun Phrases', 'Named Entities'].includes(key)
             )
         );
 
