@@ -6,7 +6,6 @@ Countries presented: United Kingdom, Italy, France, Netherlands, Belgium.
 
 The code includes parts Cytoscape.js-powered demo app at https://github.com/cytoscape/wineandcheesemap (repository is MIT-licensed, like Cytoscape.js itself.)
 
-)
 
 ## Project organisation
 
