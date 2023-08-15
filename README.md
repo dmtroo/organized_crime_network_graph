@@ -1,12 +1,11 @@
 # Organized Crime Map
 
-Countries presented: United Kingdom, Italy, France, Netherlands, Belgium
+This is an app of all Named Entities' and Noun Phrases' cooccurrences in HCSS Team Ukraine Parlamint corpora.
 
-This is an app to view NEs and NPs in GB Organized Crime Corpus pairings through a Cytoscape.js visualisation.
+Countries presented: United Kingdom, Italy, France, Netherlands, Belgium.
 
-This code includes parts Cytoscape.js-powered demo app at https://github.com/cytoscape/wineandcheesemap (repository is MIT-licensed, like Cytoscape.js itself.)
+The code includes parts Cytoscape.js-powered demo app at https://github.com/cytoscape/wineandcheesemap (repository is MIT-licensed, like Cytoscape.js itself.)
 
-)
 
 ## Project organisation
 
