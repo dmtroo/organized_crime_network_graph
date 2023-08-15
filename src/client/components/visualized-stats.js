@@ -56,7 +56,7 @@ class VisualizedStats extends Component {
             for (let country of this.countries) {
                 if (statistics[country]) {
                     for (let record of statistics[country]) {
-                        filteredStatistics.push({...record, country}); // Adding country property to each record
+                        filteredStatistics.push({...record, country});
                     }
                 }
             }
@@ -64,7 +64,6 @@ class VisualizedStats extends Component {
             filteredStatistics = statistics[selectedCountry];
         }
 
-        // Filter by date range if necessary
         filteredStatistics = filteredStatistics.filter(record => {
             if (fromDate && toDate) {
                 return new Date(record.date) >= new Date(fromDate) && new Date(record.date) <= new Date(toDate);
