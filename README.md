@@ -10,9 +10,6 @@ The statistics of the same corpora are visually presented through charts. Filter
 ### - Network Graph
 A network graph visualizes the concurrences of Named Entities (NE) and Noun Phrases (NP) in each sentence of the corpora for the selected country. The tab has interactive tools including a search tool in the right menu and a filter designed specifically for the task on the left. To use the filter type percentage (optional), select "Target node type" then search the node of the selected type through the search tool in the right menu, after that select "Connected node type" from the available on that graph visualization and "Edge type" - new, middle or old, depending on the calculated average age of two connected nodes.
 
-
-The code includes a Cytoscape.js-powered demo app at https://github.com/cytoscape/wineandcheesemap. The repository is MIT-licensed, just like Cytoscape.js.
-
 ## Project organisation
 
 The technologies used for this project include:
@@ -38,3 +35,4 @@ The project's build targets are specified as npm scripts.  Use `npm run <target>
 - `clean` : Delete all files under the dist directory
 - `lint` : Run linters on the JS and CSS files
 
+The code includes a Cytoscape.js-powered demo app at https://github.com/cytoscape/wineandcheesemap. The repository is MIT-licensed, just like Cytoscape.js.
