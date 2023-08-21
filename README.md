@@ -7,8 +7,9 @@ The dashboard consists of 3 tabs:
 The tabular format there presents the corpora's raw statistics (number of documents and sentences) and its NLP findings (number of Noun Phrases and Named Entities).
 ### - Visualized Statistics
 The statistics of the same corpora are visually presented through charts. Filters include country, date range, type of statistic, chart format, and data view (raw, accumulated, normalized).
-### - Network Graph"
+### - Network Graph
 A network graph visualizes the concurrences of Named Entities (NE) and Noun Phrases (NP) in each sentence of the corpora for the selected country. The tab has interactive tools including a search tool in the right menu and a filter designed specifically for the task on the left. To use the filter type percentage (optional), select "Target node type" then search the node of the selected type through the search tool in the right menu, after that select "Connected node type" from the available on that graph visualization and "Edge type" - new, middle or old, depending on the calculated average age of two connected nodes.
+
 
 The code includes a Cytoscape.js-powered demo app at https://github.com/cytoscape/wineandcheesemap. The repository is MIT-licensed, just like Cytoscape.js.
 
