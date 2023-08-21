@@ -21,6 +21,7 @@ The technologies used for this project include:
   - CSSNext: Compile newer CSS to older CSS to support older browsers
 - UI
   - Preact: Basic component support
+  - Plotly: statistics visualisation
   - Cytoscape: Graph/network visualisation
 - Linting
   - ESLint: Identify common problems in JS
