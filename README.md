@@ -2,7 +2,7 @@
 
 This is a dashboard of the HCSS Parliament corpus developed for five countries: the United Kingdom, Italy, France, the Netherlands, and Belgium.
 
-### The dashboard consists of 3 tabs: 
+## Three dasboard tabs: 
 ### - Statistics
 The tabular format there presents the corpora's raw statistics (number of documents and sentences) and its NLP findings (number of Noun Phrases and Named Entities).
 ### - Visualized Statistics
