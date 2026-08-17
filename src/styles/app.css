@@ -65,3 +65,37 @@ a {
   font-size: 18px;
   color: white;
 }
+
+.app-preview-banner {
+  position: absolute;
+  z-index: 2;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 90%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.app-preview-banner button {
+  flex-shrink: 0;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.app-preview-banner button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

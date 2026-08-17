@@ -47,6 +47,11 @@
   border: 1px solid var(--widgetTextColor);
 }
 
+.input-item select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .input-item .info {
   cursor: pointer;
   margin-left: 15px;

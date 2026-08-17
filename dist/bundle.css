@@ -429,6 +429,46 @@ a {
   color: white;
 }
 
+.app-preview-banner {
+  position: absolute;
+  z-index: 2;
+  top: 15px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  max-width: 90%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, .75);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.app-preview-banner button {
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.app-preview-banner button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .app-node-info {
   position: absolute;
   top: 0;
@@ -891,6 +931,20 @@ a {
   color: #1a1a1a;
 }
 
+.demo-badge {
+  position: fixed;
+  z-index: 100;
+  top: 58px;
+  right: 15px;
+  background: #e28a4a;
+  color: #2a1a08;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
 .input-group {
   margin: 40px 0 20px 0;
   display: -webkit-box;
@@ -950,6 +1004,11 @@ a {
 .input-item select:focus {
   background-color: rgba(255, 255, 255, .2);
   border: 1px solid #fff;
+}
+
+.input-item select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .input-item .info {

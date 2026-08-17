@@ -27,3 +27,17 @@
   background-color: var(--widgetTextColor);
   color: var(--widgetBgColor);
 }
+
+.demo-badge {
+  position: fixed;
+  z-index: 100;
+  top: 58px;
+  right: 15px;
+  background: #e28a4a;
+  color: #2a1a08;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  padding: 5px 10px;
+  border-radius: 4px;
+}

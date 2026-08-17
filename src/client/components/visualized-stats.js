@@ -8,16 +8,21 @@ class VisualizedStats extends Component {
             data: {},
             selectedCountry: 'All',
             selectedStatistic: 'Documents',
-            selectedChartType: 'sum',
+            selectedView: 'total',
+            selectedStyle: 'bar',
             selectedDataView: 'Raw',
             fromDate: null,
             toDate: null,
+            dateMin: null,
+            dateMax: null,
             allKeys: [],
             statistics: null
         };
         this.countries = ['GB', 'FR', 'IT', 'NL', 'BE'];
-        this.chartTypeLabels = ['Sum', 'Bar', 'Line'];
-        this.chartTypes = {'Sum': 'sum', 'Bar': 'bar', 'Line': 'line'};
+        this.views = {'Total': 'total', 'Over Time': 'timeseries'};
+        this.viewLabels = ['Total', 'Over Time'];
+        this.styles = {'Bar': 'bar', 'Line': 'line'};
+        this.styleLabels = ['Bar', 'Line'];
         this.dataViews = ['Raw', 'Accumulated', 'Normalized'];
     }
 
@@ -38,12 +43,57 @@ class VisualizedStats extends Component {
             statistics,
             allKeys,
             fromDate: min,
-            toDate: max
+            toDate: max,
+            dateMin: min,
+            dateMax: max
         }, this.plotData);
     }
 
+    applyDataView(yData) {
+        const { selectedDataView } = this.state;
+
+        if (selectedDataView === 'Accumulated') {
+            return yData.map((val, idx) => yData.slice(0, idx + 1).reduce((a, b) => a + b, 0));
+        }
+
+        if (selectedDataView === 'Normalized') {
+            const max = Math.max(...yData, 0);
+            return max ? yData.map(v => (v / max) * 100) : yData.map(() => 0);
+        }
+
+        return yData;
+    }
+
+    buildLayout() {
+        const { selectedCountry, selectedStatistic, selectedView, selectedDataView } = this.state;
+
+        if (selectedView === 'total') {
+            const title = selectedCountry === 'All' ?
+                `Total ${selectedStatistic} by country` :
+                (selectedStatistic === 'All' ? `Total statistics for ${selectedCountry}` : `Total ${selectedStatistic} for ${selectedCountry}`);
+
+            return {
+                title: { text: title },
+                xaxis: { title: { text: selectedCountry === 'All' ? 'Country' : 'Statistic' } },
+                yaxis: { title: { text: 'Total count' } },
+                margin: { t: 60 }
+            };
+        }
+
+        const subject = selectedStatistic === 'All' ? 'All statistics' : selectedStatistic;
+        const scope = selectedCountry === 'All' ? 'all countries' : selectedCountry;
+        const viewSuffix = selectedDataView === 'Raw' ? '' : ` (${selectedDataView})`;
+
+        return {
+            title: { text: `${subject} over time — ${scope}${viewSuffix}` },
+            xaxis: { title: { text: 'Date' } },
+            yaxis: { title: { text: selectedDataView === 'Normalized' ? '% of series maximum' : 'Count' } },
+            margin: { t: 60 }
+        };
+    }
+
     plotData() {
-        const {statistics, selectedCountry, selectedStatistic, selectedChartType, selectedDataView, fromDate, toDate} = this.state;
+        const {statistics, selectedCountry, selectedStatistic, selectedView, selectedStyle, fromDate, toDate} = this.state;
 
         if (!statistics || !(selectedCountry in statistics) && selectedCountry !== 'All') {
             return;
@@ -66,12 +116,13 @@ class VisualizedStats extends Component {
 
         filteredStatistics = filteredStatistics.filter(record => {
             if (fromDate && toDate) {
-                return new Date(record.date) >= new Date(fromDate) && new Date(record.date) <= new Date(toDate);
+                const recordMonth = record.date.slice(0, 7);
+                return recordMonth >= fromDate && recordMonth <= toDate;
             }
             return true;
         });
 
-        if (selectedChartType === 'sum') {
+        if (selectedView === 'total') {
             if (selectedCountry === 'All') {
                 for (let country of this.countries) {
                     let countryFilteredStatistics = filteredStatistics.filter(record => record.country === country);
@@ -79,42 +130,40 @@ class VisualizedStats extends Component {
                     let total = yData.reduce((a, b) => a + b, 0);
                     chartData.push({x: [country], y: [total], type: 'bar', name: country});
                 }
-            } else {
-                if (selectedStatistic === 'All') {
-                    for (let stat of this.state.allKeys) {
-                        let yData = filteredStatistics.map(record => record[stat] || 0);
-                        let total = yData.reduce((a, b) => a + b, 0);
-                        chartData.push({x: [stat], y: [total], type: 'bar', name: stat});
-                    }
+            } else if (selectedStatistic === 'All') {
+                for (let stat of this.state.allKeys) {
+                    let yData = filteredStatistics.map(record => record[stat] || 0);
+                    let total = yData.reduce((a, b) => a + b, 0);
+                    chartData.push({x: [stat], y: [total], type: 'bar', name: stat});
                 }
+            } else {
+                let yData = filteredStatistics.map(record => record[selectedStatistic] || 0);
+                let total = yData.reduce((a, b) => a + b, 0);
+                chartData.push({x: [selectedStatistic], y: [total], type: 'bar', name: selectedStatistic});
             }
         } else {
             if (selectedCountry === 'All') {
                 for (let country of this.countries) {
-                    if (country in statistics) {
-                        let xData = statistics[country].map(record => record.date);
-                        let yData = statistics[country].map(record => record[selectedStatistic] || 0);
-                        let yDataToShow = selectedDataView === 'Raw' ? yData : yData.map((val, idx) => yData.slice(0, idx + 1).reduce((a, b) => a + b, 0));
-                        chartData.push({x: xData, y: yDataToShow, type: selectedChartType, name: country});
-                    }
+                    let countryFilteredStatistics = filteredStatistics.filter(record => record.country === country);
+                    let xData = countryFilteredStatistics.map(record => record.date);
+                    let yData = countryFilteredStatistics.map(record => record[selectedStatistic] || 0);
+                    chartData.push({x: xData, y: this.applyDataView(yData), type: selectedStyle, name: country});
                 }
             } else {
                 let xData = filteredStatistics.map(record => record.date);
                 if (selectedStatistic === 'All') {
                     for (let stat of this.state.allKeys) {
                         let yData = filteredStatistics.map(record => record[stat] || 0);
-                        let yDataToShow = selectedDataView === 'Raw' ? yData : yData.map((val, idx) => yData.slice(0, idx + 1).reduce((a, b) => a + b, 0));
-                        chartData.push({x: xData, y: yDataToShow, type: selectedChartType, name: stat});
+                        chartData.push({x: xData, y: this.applyDataView(yData), type: selectedStyle, name: stat});
                     }
                 } else {
                     let yData = filteredStatistics.map(record => record[selectedStatistic] || 0);
-                    let yDataToShow = selectedDataView === 'Raw' ? yData : yData.map((val, idx) => yData.slice(0, idx + 1).reduce((a, b) => a + b, 0));
-                    chartData.push({x: xData, y: yDataToShow, type: selectedChartType, name: selectedStatistic});
+                    chartData.push({x: xData, y: this.applyDataView(yData), type: selectedStyle, name: selectedStatistic});
                 }
             }
         }
 
-        Plotly.newPlot('chart', chartData);
+        Plotly.newPlot('chart', chartData, this.buildLayout());
     }
 
     getMinMaxDates(statistics, selectedCountry) {
@@ -143,8 +192,14 @@ class VisualizedStats extends Component {
         });
     }
 
-    handleChartTypeChange(e) {
-        this.setState({selectedChartType: this.chartTypes[e.target.value]}, () => {
+    handleViewChange(e) {
+        this.setState({selectedView: this.views[e.target.value]}, () => {
+            this.plotData();
+        });
+    }
+
+    handleStyleChange(e) {
+        this.setState({selectedStyle: this.styles[e.target.value]}, () => {
             this.plotData();
         });
     }
@@ -155,9 +210,11 @@ class VisualizedStats extends Component {
 
         this.setState({
             selectedCountry,
-            selectedStatistic: selectedCountry === 'All' ? 'N of documents' : 'All',
+            selectedStatistic: selectedCountry === 'All' ? 'Documents' : 'All',
             fromDate: min,
-            toDate: max
+            toDate: max,
+            dateMin: min,
+            dateMax: max
         }, () => {
             this.plotData();
         });
@@ -182,7 +239,7 @@ class VisualizedStats extends Component {
     }
 
     render() {
-        const { allKeys, selectedCountry, selectedStatistic, fromDate, toDate } = this.state;
+        const { allKeys, selectedCountry, selectedStatistic, selectedView, selectedDataView, fromDate, toDate, dateMin, dateMax } = this.state;
         let statistics = ['Documents', 'Sentences', 'Noun Phrases', 'Named Entities'].concat(
             allKeys.filter(
                 key => !['Documents', 'Sentences', 'Noun Phrases', 'Named Entities'].includes(key)
@@ -192,6 +249,8 @@ class VisualizedStats extends Component {
         if (selectedCountry !== 'All') {
             statistics = ['All', ...statistics];
         }
+
+        const isTimeSeries = selectedView === 'timeseries';
 
         return h('div', {},
             h('h1', { style: { textAlign: 'center', color: 'white' } }, 'Visualized Statistics'),
@@ -207,11 +266,11 @@ class VisualizedStats extends Component {
                 ),
                 h('div', { class: 'input-item' },
                     h('label', { for: 'from-date' }, 'From:'),
-                    h('input', { type: 'month', onChange: this.handleFromDateChange.bind(this), value: fromDate, id: 'from-date' }),
+                    h('input', { type: 'month', min: dateMin, max: dateMax, onChange: this.handleFromDateChange.bind(this), value: fromDate, id: 'from-date' }),
                 ),
                 h('div', { class: 'input-item' },
                     h('label', { for: 'to-date' }, 'To:'),
-                    h('input', { type: 'month', onChange: this.handleToDateChange.bind(this), value: toDate, id: 'to-date' }),
+                    h('input', { type: 'month', min: dateMin, max: dateMax, onChange: this.handleToDateChange.bind(this), value: toDate, id: 'to-date' }),
                 ),
                 h('div', { class: 'input-item' },
                     h('label', { for: 'statistic-select' }, 'Statistic:'),
@@ -222,10 +281,23 @@ class VisualizedStats extends Component {
                     ),
                 ),
                 h('div', { class: 'input-item' },
-                    h('label', { for: 'chart-type-select' }, 'Chart Type:'),
-                    h('select', { onChange: this.handleChartTypeChange.bind(this), value: Object.keys(this.chartTypes).find(key => this.chartTypes[key] === this.state.selectedChartType), id: 'chart-type-select' },
-                        this.chartTypeLabels.map(type =>
-                            h('option', { value: type }, type)
+                    h('label', { for: 'view-select' }, 'View:'),
+                    h('i', {
+                        class: 'fas fa-info-circle',
+                        style: { paddingLeft: '1px', marginRight: '8px', color: '#888', cursor: 'pointer' },
+                        title: 'Total: Adds up every data point in the selected date range into a single bar per country/statistic.\n\nOver Time: Plots each data point across the selected date range, so you can see trends over time.'
+                    }),
+                    h('select', { onChange: this.handleViewChange.bind(this), value: Object.keys(this.views).find(key => this.views[key] === selectedView), id: 'view-select' },
+                        this.viewLabels.map(label =>
+                            h('option', { value: label }, label)
+                        )
+                    ),
+                ),
+                h('div', { class: 'input-item' },
+                    h('label', { for: 'style-select' }, 'Chart Style:'),
+                    h('select', { onChange: this.handleStyleChange.bind(this), value: Object.keys(this.styles).find(key => this.styles[key] === this.state.selectedStyle), id: 'style-select', disabled: !isTimeSeries },
+                        this.styleLabels.map(label =>
+                            h('option', { value: label }, label)
                         )
                     ),
                 ),
@@ -234,9 +306,9 @@ class VisualizedStats extends Component {
                     h('i', {
                         class: 'fas fa-info-circle',
                         style: { paddingLeft: '1px', marginRight: '8px', color: '#888', cursor: 'pointer' },
-                        title: 'Raw data: Displays individual data points as they were collected, without any aggregation.\n\nAccumulated data: Displays data points in a cumulative format, where each point represents the total of the current and all previous data points.'
+                        title: 'Raw data: Displays individual data points as they were collected, without any aggregation.\n\nAccumulated data: Displays data points in a cumulative format, where each point represents the total of the current and all previous data points.\n\nNormalized data: Scales each series to a percentage of its own maximum value (0-100%), so series with very different scales (e.g. Noun Phrases vs. Named Entities, or a large corpus vs. a small one) can be compared on the same chart. Only applies to the "Over Time" view.'
                     }),
-                    h('select', { onChange: this.handleDataViewChange.bind(this), id: 'data-view-select' },
+                    h('select', { onChange: this.handleDataViewChange.bind(this), value: selectedDataView, id: 'data-view-select', disabled: !isTimeSeries },
                         this.dataViews.map(view =>
                             h('option', { value: view }, view)
                         )

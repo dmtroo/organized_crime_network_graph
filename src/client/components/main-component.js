@@ -50,6 +50,7 @@ class MainComponent extends Component {
         }
 
         return h('div', {}, [
+            h('div', {class: 'demo-badge'}, 'DEMO (LIMITED DATA)'),
             h('div', {class: 'switch-btn-container'}, [
                 h('button', {class: 'switch-btn', onClick: () => this.switchPage('statistics')}, 'Statistics'),
                 h('button', {class: 'switch-btn', onClick: () => this.switchPage('visualizedStats')}, 'Visualized Statistics'),
